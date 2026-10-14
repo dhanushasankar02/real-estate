@@ -3749,7 +3749,6 @@
           const isDark = document.body.classList.toggle('dark');
           localStorage.setItem('estate_theme', isDark ? 'dark' : 'light');
           updateThemeIcon(isDark);
-          showAdminToast(`Theme changed to ${isDark ? 'Dark Mode' : 'Light Mode'}`);
         });
       }
 
