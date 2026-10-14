@@ -1,0 +1,3294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estate Pro · Projects</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script type="module">
+    import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+    window.Motion = { animate, inView, stagger };
+  </script>
+  <style>
+    /* ========== GLOBAL RESET ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* ========== THEME VARIABLES — VIOLET + PINK ========== */
+    :root {
+      --nav-bg: #ffffff;
+      --bg-body: #faf8ff;
+      --footer-bg: #ffffff;
+      --footer-bottom-bg: #f5f0ff;
+      --text-primary: #1e1033;
+      --text-secondary: #554669;
+      --text-muted: #8577a0;
+      --border-light: #ede5fa;
+      --hover-bg: #f6f1ff;
+
+      --brand: #7c3aed;
+      --brand-dark: #6d28d9;
+      --brand-light: #a855f7;
+      --brand-soft: #ede9fe;
+      --brand-soft-text: #7c3aed;
+
+      --brand-accent: #ec4899;
+      --brand-accent-dark: #db2777;
+
+      --shadow-nav: 0 1px 8px rgba(124, 58, 237, 0.06);
+      --dropdown-bg: #ffffff;
+      --dropdown-shadow: 0 12px 28px rgba(124, 58, 237, 0.14);
+      --mobile-menu-bg: #ffffff;
+      --social-bg: #f4eeff;
+
+      /* Projects page local tokens */
+      --pj-card-bg: #ffffff;
+      --pj-section-alt: #ffffff;
+      --pj-gradient-soft: linear-gradient(135deg, #f8f9ff 0%, #eef1ff 100%);
+      --pj-glass: rgba(255, 255, 255, 0.85);
+      --pj-success: #10b981;
+      --pj-info: #3b82f6;
+      --pj-warning: #f59e0b;
+    }
+
+    body.dark {
+      --nav-bg: #150b25;
+      --bg-body: #0a0512;
+      --footer-bg: #150b25;
+      --footer-bottom-bg: #100720;
+      --text-primary: #f5f0ff;
+      --text-secondary: #c4b5d9;
+      --text-muted: #8a7aa5;
+      --border-light: #2a1b45;
+      --hover-bg: #1e1233;
+
+      --brand: #a855f7;
+      --brand-dark: #7c3aed;
+      --brand-light: #c084fc;
+      --brand-soft: #2e1a4d;
+      --brand-soft-text: #c084fc;
+
+      --brand-accent: #f472b6;
+      --brand-accent-dark: #ec4899;
+
+      --shadow-nav: 0 1px 8px rgba(0, 0, 0, 0.5);
+      --dropdown-bg: #1e1233;
+      --dropdown-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+      --mobile-menu-bg: #150b25;
+      --social-bg: #1e1233;
+
+      --pj-card-bg: #1a1a2e;
+      --pj-section-alt: #12121f;
+      --pj-gradient-soft: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      --pj-glass: rgba(26, 26, 46, 0.85);
+    }
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+      background-color: var(--nav-bg);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: var(--shadow-nav);
+      padding: 0 2.5rem;
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      gap: 2rem;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      text-decoration: none;
+      padding-right: 1.5rem;
+    }
+
+    .logo-emblem {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #a855f7 0%, #6d28d9 100%);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover .logo-emblem { transform: rotate(-6deg) scale(1.05); }
+
+    .logo-emblem::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+      transform: rotate(25deg);
+      pointer-events: none;
+    }
+
+    .logo-emblem i { font-size: 1.35rem; color: #ffffff; z-index: 2; position: relative; }
+
+    .logo-emblem::after {
+      content: '';
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 9px; height: 9px;
+      background: var(--brand-accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px var(--nav-bg);
+      z-index: 3;
+      transition: box-shadow 0.3s;
+    }
+
+    body.dark .logo-emblem::after { box-shadow: 0 0 0 2px #150b25; }
+
+    .logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+
+    .logo-main {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--text-primary);
+      white-space: nowrap;
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .logo-main .brand-pro { color: var(--brand); font-weight: 800; }
+    .logo-main .brand-dot { color: var(--brand-accent); font-size: 1.7rem; line-height: 1; }
+
+    .logo-tagline {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 3px;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      list-style: none;
+      margin: 0;
+      flex: 1 1 auto;
+      white-space: nowrap;
+      padding: 0;
+      overflow: visible;
+      min-width: 0;
+    }
+
+    .nav-links > li { position: relative; flex-shrink: 0; }
+
+    .nav-links a,
+    .nav-links .dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.6rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-links a:hover,
+    .nav-links .dropdown-toggle:hover {
+      background-color: var(--hover-bg);
+      color: var(--brand);
+    }
+
+    .nav-links .active-pill a,
+    .nav-links .active-pill .dropdown-toggle {
+      background-color: var(--brand-soft);
+      color: var(--brand-soft-text);
+      font-weight: 600;
+    }
+
+    .dropdown { position: relative; }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      min-width: 210px;
+      background-color: var(--dropdown-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      box-shadow: var(--dropdown-shadow);
+      padding: 0.5rem;
+      list-style: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+      z-index: 1200;
+      pointer-events: none;
+    }
+
+    .dropdown:hover .dropdown-menu,
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .dropdown-menu li a {
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu li a:hover { background-color: var(--hover-bg); color: var(--brand); }
+    .dropdown-menu li a i { width: 16px; font-size: 0.8rem; color: var(--text-muted); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--border-light);
+      height: 44px;
+    }
+
+    .outline-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1.5px solid var(--border-light);
+      border-radius: 30px;
+      padding: 0.55rem 1.15rem;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .outline-pill i { font-size: 0.85rem; color: var(--text-muted); }
+    .outline-pill:hover { background-color: var(--hover-bg); border-color: var(--brand); color: var(--brand); }
+    .outline-pill:hover i { color: var(--brand); }
+
+    .btn-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      border: none;
+      border-radius: 40px;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+      transition: all 0.15s;
+    }
+
+    .btn-brand i { font-size: 0.9rem; color: white; }
+    .btn-brand:hover { transform: scale(1.03); box-shadow: 0 8px 20px rgba(124, 58, 237, 0.45); }
+
+    .hamburger {
+      display: none;
+      background: transparent;
+      border: 1.5px solid var(--border-light);
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .hamburger:hover { background-color: var(--hover-bg); }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: var(--text-primary);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ========== MOBILE MENU ========== */
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 8, 40, 0.55);
+      z-index: 1500;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .mobile-overlay.active {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 340px;
+      max-width: 85vw;
+      height: 100vh;
+      background-color: var(--mobile-menu-bg);
+      z-index: 1600;
+      overflow-y: auto;
+      padding: 1.5rem;
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -8px 0 30px rgba(20, 8, 40, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .mobile-menu.active { right: 0; }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 0.75rem;
+    }
+
+    .mobile-menu-header .logo-main { font-size: 1.15rem; }
+
+    .mobile-close {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .mobile-close:hover { background-color: var(--hover-bg); }
+
+    .mobile-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-nav-list > li { width: 100%; }
+
+    .mobile-nav-list a,
+    .mobile-nav-list .mobile-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0.95rem 1.1rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      text-align: left;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mobile-nav-list a:hover,
+    .mobile-nav-list .mobile-dropdown-toggle:hover {
+      background-color: var(--hover-bg);
+      color: var(--brand);
+    }
+
+    .mobile-nav-list .mobile-dropdown-toggle .chevron {
+      transition: transform 0.25s;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .mobile-nav-list .mobile-dropdown-toggle.open .chevron { transform: rotate(180deg); }
+
+    .mobile-submenu {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding-left: 0.75rem;
+    }
+
+    .mobile-submenu.open { max-height: 300px; }
+
+    .mobile-submenu li a {
+      padding: 0.7rem 1.1rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      border-radius: 10px;
+    }
+
+    .mobile-submenu li a:hover { background-color: var(--hover-bg); color: var(--brand); }
+
+    .mobile-actions {
+      margin-top: auto;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mobile-actions .outline-pill,
+    .mobile-actions .btn-brand { width: 100%; justify-content: center; padding: 0.85rem 1rem; font-size: 0.9rem; }
+
+    /* ================================================================
+       ===============  PROJECTS PAGE CONTENT  ========================
+       ================================================================ */
+    .projects-page {
+      width: 100%;
+      overflow-x: hidden;
+      background: var(--bg-body);
+      color: var(--text-primary);
+    }
+
+    /* ---------- SECTION 1: HERO — Full-bleed cinematic with overlay stats ---------- */
+    .pj-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 100px 5% 70px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .pj-hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .pj-hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+    }
+    .pj-hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(20, 8, 40, 0.95) 0%, rgba(20, 8, 40, 0.55) 40%, rgba(20, 8, 40, 0.25) 100%),
+        linear-gradient(90deg, rgba(124, 58, 237, 0.35), transparent 60%);
+    }
+    .pj-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 60px;
+      align-items: flex-end;
+      color: #fff;
+    }
+    .pj-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 30px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+    .pj-hero-eyebrow .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+    }
+    .pj-hero-headline {
+      font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 22px;
+      color: #fff;
+    }
+    .pj-hero-headline .gold {
+      background: linear-gradient(90deg, #fcd34d, #f472b6, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pj-hero-sub {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 36px;
+      max-width: 600px;
+    }
+    .pj-hero-ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .pj-hero-btn-primary {
+      padding: 15px 32px;
+      background: #fff;
+      color: var(--brand);
+      border: none;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.25s;
+      font-family: inherit;
+    }
+    .pj-hero-btn-primary:hover { transform: translateY(-3px); }
+    .pj-hero-btn-ghost {
+      padding: 15px 32px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+    .pj-hero-btn-ghost:hover { background: rgba(255, 255, 255, 0.2); }
+
+    /* Live stats strip inside hero */
+    .pj-hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .pj-hero-stat {
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      color: #fff;
+    }
+    .pj-hero-stat .icon {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .pj-hero-stat .num {
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .pj-hero-stat .label {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+
+    /* ---------- SECTION 2: FEATURED PROJECT SHOWCASE (Swiper-ish) ---------- */
+    .pj-featured {
+      padding: 90px 5%;
+      background: var(--pj-section-alt);
+    }
+    .pj-section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .pj-section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.8px;
+    }
+    .pj-section-sub {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .pj-featured-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 22px;
+    }
+    .pj-feat-card {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 15px 35px rgba(124, 58, 237, 0.1);
+      transition: transform 0.4s, box-shadow 0.4s;
+      min-height: 380px;
+      isolation: isolate;
+    }
+    .pj-feat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 55px rgba(124, 58, 237, 0.22);
+    }
+    .pj-feat-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+      z-index: 0;
+    }
+    .pj-feat-card:hover img { transform: scale(1.08); }
+    .pj-feat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20, 8, 40, 0.92) 0%, rgba(20, 8, 40, 0.35) 50%, transparent 100%);
+      z-index: 1;
+    }
+    .pj-feat-card.large { grid-column: span 7; }
+    .pj-feat-card.medium { grid-column: span 5; }
+    .pj-feat-card.half { grid-column: span 6; min-height: 340px; }
+    .pj-feat-card.small { grid-column: span 3; min-height: 280px; }
+
+    .pj-feat-body {
+      position: relative;
+      z-index: 2;
+      padding: 28px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: #fff;
+    }
+    .pj-feat-status {
+      position: absolute;
+      top: 22px;
+      left: 22px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 3;
+    }
+    .pj-feat-status .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+    }
+    .pj-feat-status.new .dot { background: #ec4899; box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3); }
+    .pj-feat-status.sold .dot { background: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3); }
+
+    .pj-feat-type {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      align-self: flex-start;
+      color: #fff;
+    }
+    .pj-feat-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .pj-feat-card.large .pj-feat-title { font-size: 2rem; }
+    .pj-feat-loc {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pj-feat-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      gap: 12px;
+    }
+    .pj-feat-price-label {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+    }
+    .pj-feat-price {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .pj-feat-price span {
+      font-size: 0.78rem;
+      font-weight: 500;
+      opacity: 0.75;
+    }
+    .pj-feat-arrow {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: var(--brand);
+      border-radius: 50%;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .pj-feat-card:hover .pj-feat-arrow { transform: rotate(-45deg) scale(1.1); }
+
+    /* ---------- SECTION 3: PROJECT TIMELINE (Progress bars) ---------- */
+    .pj-timeline {
+      padding: 90px 5%;
+      background: var(--pj-gradient-soft);
+    }
+    .pj-timeline-header {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+    .pj-timeline-wrapper {
+      max-width: 1150px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .pj-timeline-axis {
+      position: absolute;
+      top: 32px;
+      left: 3%;
+      right: 3%;
+      height: 4px;
+      background: var(--border-light);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .pj-timeline-axis::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--brand-light), var(--brand), var(--brand-accent));
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+    .pj-timeline-axis.animated::after {
+      animation: timelineFill 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes timelineFill {
+      to { transform: scaleX(1); }
+    }
+    .pj-timeline-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+    .pj-time-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+    .pj-time-marker {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--pj-card-bg);
+      border: 3px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      transition: all 0.35s;
+      margin-bottom: 20px;
+    }
+    .pj-time-node:hover .pj-time-marker {
+      border-color: var(--brand);
+      transform: scale(1.08);
+      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.25);
+    }
+    .pj-time-marker i {
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pj-time-year {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--brand);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .pj-time-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .pj-time-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      max-width: 220px;
+    }
+
+    /* ---------- SECTION 4: PROJECT CATEGORIES (Tabs with content) ---------- */
+    .pj-categories {
+      padding: 90px 5%;
+      background: var(--pj-section-alt);
+    }
+    .pj-cat-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .pj-cat-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+    .pj-cat-tab {
+      padding: 12px 24px;
+      background: var(--pj-card-bg);
+      border: 1.5px solid var(--border-light);
+      color: var(--text-secondary);
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .pj-cat-tab:hover { border-color: var(--brand); color: var(--brand); }
+    .pj-cat-tab.active {
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+    .pj-cat-panel {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: none;
+    }
+    .pj-cat-panel.active { display: block; }
+    .pj-cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .pj-cat-card {
+      background: var(--pj-card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .pj-cat-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--brand);
+      box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+    }
+    .pj-cat-img {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+    .pj-cat-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .pj-cat-card:hover .pj-cat-img img { transform: scale(1.1); }
+    .pj-cat-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 5px 12px;
+      background: var(--pj-glass);
+      backdrop-filter: blur(12px);
+      color: var(--brand);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      border-radius: 20px;
+      border: 1px solid var(--border-light);
+    }
+    .pj-cat-body {
+      padding: 22px;
+    }
+    .pj-cat-body h3 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+    .pj-cat-loc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .pj-cat-specs {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .pj-cat-spec {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .pj-cat-spec i { color: var(--brand); font-size: 0.75rem; }
+    .pj-cat-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pj-cat-price {
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pj-cat-price span {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      -webkit-text-fill-color: var(--text-muted);
+      margin-left: 3px;
+    }
+    .pj-cat-link {
+      font-size: 0.82rem;
+      color: var(--brand);
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.25s;
+    }
+    .pj-cat-card:hover .pj-cat-link { gap: 8px; }
+
+    /* ---------- SECTION 5: MAP / LOCATIONS EXPLORER ---------- */
+    .pj-locations {
+      padding: 90px 5%;
+      background: var(--pj-gradient-soft);
+    }
+    .pj-locations-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .pj-locations-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 40px;
+      align-items: stretch;
+    }
+    .pj-loc-list {
+      background: var(--pj-card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 18px;
+      max-height: 560px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pj-loc-item {
+      padding: 18px 20px;
+      background: transparent;
+      border: 1.5px solid transparent;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .pj-loc-item:hover {
+      background: var(--hover-bg);
+      border-color: var(--border-light);
+    }
+    .pj-loc-item.active {
+      background: linear-gradient(135deg, var(--brand-soft), var(--hover-bg));
+      border-color: var(--brand);
+    }
+    .pj-loc-item.active .pj-loc-icon {
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #fff;
+    }
+    .pj-loc-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.25s;
+    }
+    .pj-loc-text strong {
+      display: block;
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .pj-loc-text span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pj-loc-item.active .pj-loc-text strong { color: var(--brand); }
+
+    .pj-loc-visual {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--pj-card-bg);
+      border: 1px solid var(--border-light);
+      min-height: 560px;
+    }
+    .pj-loc-visual img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .pj-loc-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20, 8, 40, 0.85) 0%, transparent 55%);
+    }
+    .pj-loc-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 32px;
+      z-index: 2;
+      color: #fff;
+    }
+    .pj-loc-info h3 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .pj-loc-info p {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 18px;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+    .pj-loc-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .pj-loc-tag {
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.4px;
+    }
+
+    /* ---------- SECTION 6: AWARDS / TRUST BAND ---------- */
+    .pj-awards {
+      padding: 90px 5%;
+      background: var(--pj-section-alt);
+      position: relative;
+      overflow: hidden;
+    }
+    .pj-awards::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border-light) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .pj-awards-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .pj-awards-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .pj-awards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .pj-award-card {
+      padding: 32px 24px;
+      background: var(--pj-card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .pj-award-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--brand-light), var(--brand-accent));
+      transform: translateX(-50%);
+      border-radius: 0 0 4px 4px;
+      transition: width 0.4s;
+    }
+    .pj-award-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--brand);
+      box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+    }
+    .pj-award-card:hover::before { width: 120px; }
+    .pj-award-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--brand-soft), var(--hover-bg));
+      border-radius: 16px;
+      font-size: 1.5rem;
+      color: var(--brand);
+    }
+    .pj-award-card h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .pj-award-card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+    .pj-award-year {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--brand);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    /* ---------- SECTION 7: FINAL CTA (Split magazine) ---------- */
+    .pj-final {
+      padding: 0;
+      background: var(--pj-section-alt);
+    }
+    .pj-final-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      min-height: 520px;
+    }
+    .pj-final-left {
+      padding: 90px 6% 90px 5%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--pj-section-alt);
+    }
+    .pj-final-left .eyebrow {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      align-self: flex-start;
+    }
+    .pj-final-left h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+    }
+    .pj-final-left h2 .grad {
+      background: linear-gradient(90deg, var(--brand-light), var(--brand-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pj-final-left p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 520px;
+    }
+    .pj-final-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .pj-final-check {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .pj-final-check i {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+    .pj-final-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .pj-final-btn-primary {
+      padding: 15px 32px;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 24px rgba(124, 58, 237, 0.35);
+      transition: transform 0.25s;
+      font-family: inherit;
+    }
+    .pj-final-btn-primary:hover { transform: translateY(-3px); }
+    .pj-final-btn-outline {
+      padding: 15px 32px;
+      background: transparent;
+      color: var(--text-primary);
+      border: 1.5px solid var(--border-light);
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+    .pj-final-btn-outline:hover { border-color: var(--brand); color: var(--brand); }
+
+    .pj-final-right {
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+    }
+    .pj-final-right img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .pj-final-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(236, 72, 153, 0.15));
+    }
+    .pj-final-float {
+      position: absolute;
+      bottom: 32px;
+      right: 32px;
+      z-index: 2;
+      background: var(--pj-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 22px 26px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      max-width: 280px;
+    }
+    .pj-final-float-stars {
+      display: flex;
+      gap: 3px;
+      color: #facc15;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    .pj-final-float p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    .pj-final-float strong {
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      display: block;
+    }
+    .pj-final-float span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1100px) {
+      .pj-hero-content { grid-template-columns: 1fr; gap: 40px; }
+      .pj-hero-stats { grid-template-columns: repeat(4, 1fr); }
+      .pj-featured-grid { grid-template-columns: repeat(6, 1fr); }
+      .pj-feat-card.large,
+      .pj-feat-card.medium { grid-column: span 6; }
+      .pj-feat-card.half { grid-column: span 3; }
+      .pj-feat-card.small { grid-column: span 3; }
+      .pj-timeline-row { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; }
+      .pj-timeline-axis { display: none; }
+      .pj-cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .pj-locations-grid { grid-template-columns: 1fr; }
+      .pj-loc-list { max-height: 320px; }
+      .pj-loc-visual { min-height: 420px; }
+      .pj-awards-grid { grid-template-columns: repeat(2, 1fr); }
+      .pj-final-grid { grid-template-columns: 1fr; }
+      .pj-final-right { min-height: 380px; }
+    }
+    @media (max-width: 768px) {
+      .pj-hero { min-height: auto; padding: 120px 5% 60px; }
+      .pj-hero-stats { grid-template-columns: repeat(2, 1fr); }
+      .pj-featured-grid { grid-template-columns: 1fr; gap: 20px; }
+      .pj-feat-card.large,
+      .pj-feat-card.medium,
+      .pj-feat-card.half,
+      .pj-feat-card.small { grid-column: span 1; min-height: 320px; }
+      .pj-timeline-row { grid-template-columns: 1fr; gap: 36px; }
+      .pj-cat-grid { grid-template-columns: 1fr; }
+      .pj-awards-grid { grid-template-columns: 1fr; }
+      .pj-final-left { padding: 60px 6% 60px 5%; }
+      .pj-final-float { right: 16px; bottom: 16px; padding: 18px 20px; max-width: 220px; }
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      background-color: var(--footer-bg);
+      border-top: 1px solid var(--border-light);
+      padding: 4rem 2.5rem 0;
+      color: var(--text-secondary);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr 1.4fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .footer-brand .logo {
+      padding-right: 0;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-brand .logo-emblem {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+    }
+
+    .footer-brand .logo-emblem i { font-size: 1.2rem; }
+    .footer-brand .logo-main { font-size: 1.3rem; }
+    .footer-brand .logo-tagline { font-size: 0.55rem; }
+
+    .footer-about {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      max-width: 340px;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background-color: var(--social-bg);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .social-btn:hover {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(124, 58, 237, 0.35);
+    }
+
+    .footer-col h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.2px;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 30px;
+      height: 2.5px;
+      background: linear-gradient(90deg, var(--brand) 0%, var(--brand-accent) 100%);
+      border-radius: 2px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .footer-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.15s, padding-left 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-col ul li a::before {
+      content: '';
+      width: 0;
+      height: 1.5px;
+      background-color: var(--brand);
+      transition: width 0.2s;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--brand);
+      padding-left: 4px;
+    }
+
+    .footer-col ul li a:hover::before { width: 12px; }
+
+    .footer-newsletter p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      background-color: var(--social-bg);
+      border: 1.5px solid var(--border-light);
+      border-radius: 40px;
+      padding: 4px;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+    }
+
+    .newsletter-form:focus-within {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-soft);
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0.65rem 1rem;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      font-family: inherit;
+      min-width: 0;
+    }
+
+    .newsletter-form input::placeholder { color: var(--text-muted); }
+
+    .newsletter-form button {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      border: none;
+      border-radius: 40px;
+      padding: 0.65rem 1.2rem;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .newsletter-form button:hover { transform: scale(1.03); }
+
+    .newsletter-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .newsletter-note i { color: var(--brand); }
+
+    .footer-bottom {
+      background-color: var(--footer-bottom-bg);
+      border-top: 1px solid var(--border-light);
+      padding: 1.5rem 2.5rem;
+      margin: 0 -2.5rem;
+    }
+
+    .footer-bottom-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-copy strong { color: var(--brand); font-weight: 600; }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom-links a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-bottom-links a:hover { color: var(--brand); }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.45);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 900;
+    }
+
+    .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .back-to-top:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(124, 58, 237, 0.55); }
+
+    /* ========== RESPONSIVE (nav + footer) ========== */
+    @media (max-width: 1200px) {
+            .nav-links,
+      .nav-actions .btn-brand { display: none; }
+
+      .hamburger {
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+      .mobile-overlay { display: block; }
+      .navbar { padding: 0 1.5rem; gap: 10px; }
+      .logo-tagline { display: none; }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        gap: 8px;
+        padding-left: 0;
+        border-left: none;
+      }
+      html[dir="rtl"] .nav-actions {
+        margin-left: 0;
+        margin-right: auto;
+      }
+      .outline-pill {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border-radius: 50%;
+        justify-content: center;
+      }
+      .outline-pill #themeLabel,
+      .outline-pill #rtlLabel,
+      .outline-pill span {
+        display: none;
+      }
+      .outline-pill i {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .footer-container {
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 2.5rem;
+      }
+
+      .footer-newsletter { grid-column: 1 / -1; max-width: 480px; }
+    }
+
+    @media (max-width: 900px) {
+      .footer-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+      }
+
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-newsletter { grid-column: 1 / -1; max-width: 100%; }
+    }
+
+    @media (max-width: 600px) {
+      .footer { padding: 3rem 1.25rem 0; }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding-bottom: 2rem;
+      }
+
+      .footer-bottom {
+        margin: 0 -1.25rem;
+        padding: 1.25rem 1.25rem;
+      }
+
+      .footer-bottom-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-bottom-links { justify-content: center; }
+    }
+
+        @media (max-width: 480px) {
+      .logo-tagline { display: none; }
+      .logo-main { font-size: 1.15rem; }
+      .logo-emblem { width: 38px; height: 38px; border-radius: 11px; }
+      .logo-emblem i { font-size: 1.05rem; }
+      .navbar { height: 66px; padding: 0 14px; }
+      .nav-actions { gap: 6px; }
+      .outline-pill, .hamburger { width: 36px; height: 36px; }
+      .back-to-top { bottom: 20px; right: 20px; width: 42px; height: 42px; }
+    }
+
+    @media (min-width: 1201px) and (max-width: 1400px) {
+      .navbar { padding: 0 1.5rem; gap: 1.5rem; }
+      .nav-links a,
+      .nav-links .dropdown-toggle {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.84rem;
+      }
+      .outline-pill { padding: 0.5rem 0.9rem; font-size: 0.79rem; }
+      .btn-brand { padding: 0.6rem 1.15rem; font-size: 0.83rem; }
+      .nav-actions { gap: 8px; padding-left: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <div class="logo-emblem">
+        <i class="fas fa-house-chimney"></i>
+      </div>
+      <div class="logo-text">
+        <div class="logo-main">
+          Estate<span class="brand-pro">Pro</span><span class="brand-dot">.</span>
+        </div>
+        <div class="logo-tagline">PREMIUM REAL ESTATE</div>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button">
+          Home <i class="fas fa-chevron-down" style="font-size: 0.65rem;"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="index.html"><i class="fas fa-door-open"></i> Home 1</a></li>
+          <li><a href="home2.html"><i class="fas fa-door-open"></i> Home 2</a></li>
+        </ul>
+      </li>
+
+      <li><a href="buy property.html">Buy Property</a></li>
+      <li><a href="rent property.html">Rent Property</a></li>
+      <li><a href="sell property.html">Sell Property</a></li>
+      <li class="active-pill"><a href="projects.html">Projects</a></li>
+      <li><a href="agents.html">Agents</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button">
+          Dashboard <i class="fas fa-chevron-down" style="font-size: 0.65rem;"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="user-dashboard.html"><i class="fas fa-user"></i> User Dashboard</a></li>
+          <li><a href="admin-dashboard.html"><i class="fas fa-crown"></i> Admin Dashboard</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="outline-pill" id="darkModeBtn" type="button">
+        <i class="fas fa-moon" id="themeIcon"></i> <span id="themeLabel">Dark Mode</span>
+      </button>
+
+      <button class="outline-pill" id="rtlBtn" type="button">
+        <i class="fas fa-arrow-right-arrow-left"></i> <span id="rtlLabel">RTL / LTR</span>
+      </button>
+
+      <a href="login.html" class="btn-brand">
+        <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+      </a>
+    </div>
+
+    <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ================= MOBILE OVERLAY ================= -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- ================= MOBILE MENU ================= -->
+  <aside class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <a href="index.html" class="logo" style="gap: 10px; padding-right: 0;">
+        <div class="logo-emblem" style="width:38px;height:38px;border-radius:11px;">
+          <i class="fas fa-house-chimney" style="font-size:1.05rem;"></i>
+        </div>
+        <div class="logo-main" style="font-size:1.05rem;">
+          Estate<span class="brand-pro">Pro</span><span class="brand-dot">.</span>
+        </div>
+      </a>
+      <button class="mobile-close" id="mobileCloseBtn" type="button" aria-label="Close menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li>
+        <button class="mobile-dropdown-toggle" type="button">
+          Home <i class="fas fa-chevron-down chevron"></i>
+        </button>
+        <ul class="mobile-submenu">
+          <li><a href="index.html">Home 1</a></li>
+          <li><a href="home2.html">Home 2</a></li>
+        </ul>
+      </li>
+
+      <li><a href="buy property.html">Buy Property</a></li>
+      <li><a href="rent property.html">Rent Property</a></li>
+      <li><a href="sell property.html">Sell Property</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="agents.html">Agents</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+
+      <li>
+        <button class="mobile-dropdown-toggle" type="button">
+          Dashboard <i class="fas fa-chevron-down chevron"></i>
+        </button>
+        <ul class="mobile-submenu">
+          <li><a href="user-dashboard.html">User Dashboard</a></li>
+          <li><a href="admin-dashboard.html">Admin Dashboard</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="mobile-actions">
+      <button class="outline-pill" id="mobileDarkModeBtn" type="button">
+        <i class="fas fa-moon" id="mobileThemeIcon"></i> <span id="mobileThemeLabel">Dark Mode</span>
+      </button>
+
+      <button class="outline-pill" id="mobileRtlBtn" type="button">
+        <i class="fas fa-arrow-right-arrow-left"></i> <span>RTL / LTR</span>
+      </button>
+
+      <a href="login.html" class="btn-brand">
+        <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= PROJECTS PAGE ================= -->
+  <main class="projects-page">
+
+    <!-- ========== SECTION 1: HERO (Cinematic full-bleed) ========== -->
+    <section class="pj-hero">
+      <div class="pj-hero-bg">
+        <img src="images/projects-hero.jpg" alt="Featured Project" />
+      </div>
+
+      <div class="pj-hero-content">
+        <div class="pj-hero-left">
+          <div class="pj-hero-eyebrow" data-anim="hero-eyebrow">
+            <span class="pulse-dot"></span> 24 Live Projects · 2026
+          </div>
+          <h1 class="pj-hero-headline" data-anim="hero-headline">
+            Where <span class="gold">vision</span><br />
+            meets <span class="gold">concrete.</span>
+          </h1>
+          <p class="pj-hero-sub" data-anim="hero-sub">
+            Explore landmark developments shaping India's skylines. From
+            sky-high penthouses to gated villa communities — see what's
+            being built for tomorrow, today.
+          </p>
+          <div class="pj-hero-ctas" data-anim="hero-ctas">
+            <button class="pj-hero-btn-primary">
+              <i class="fas fa-map-marked-alt"></i> Explore All Projects
+            </button>
+            <button class="pj-hero-btn-ghost">
+              <i class="fas fa-vr-cardboard"></i> Take Virtual Tour
+            </button>
+          </div>
+        </div>
+
+        <div class="pj-hero-stats" data-anim="hero-stats">
+          <div class="pj-hero-stat">
+            <div class="icon"><i class="fas fa-building"></i></div>
+            <div class="num">₹8,200 Cr</div>
+            <div class="label">Project value</div>
+          </div>
+          <div class="pj-hero-stat">
+            <div class="icon"><i class="fas fa-city"></i></div>
+            <div class="num">12</div>
+            <div class="label">Cities</div>
+          </div>
+          <div class="pj-hero-stat">
+            <div class="icon"><i class="fas fa-hard-hat"></i></div>
+            <div class="num">4,500+</div>
+            <div class="label">Units delivered</div>
+          </div>
+          <div class="pj-hero-stat">
+            <div class="icon"><i class="fas fa-award"></i></div>
+            <div class="num">18</div>
+            <div class="label">Industry awards</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 2: FEATURED PROJECT SHOWCASE ========== -->
+    <section class="pj-featured">
+      <div class="pj-section-header">
+        <h2 class="pj-section-title" data-anim="feat-title">Signature developments</h2>
+        <p class="pj-section-sub" data-anim="feat-sub">
+          Handcrafted towers, townships, and villas — each one an architectural statement.
+        </p>
+      </div>
+
+      <div class="pj-featured-grid">
+        <div class="pj-feat-card large" data-anim="feat-card">
+          <img src="images/projects-1.jpg" alt="Aurora Heights" />
+          <div class="pj-feat-status"><span class="dot"></span> Selling Fast</div>
+          <div class="pj-feat-body">
+            <span class="pj-feat-type">Ultra-Luxury Residential</span>
+            <h3 class="pj-feat-title">Aurora Heights</h3>
+            <p class="pj-feat-loc"><i class="fas fa-map-marker-alt"></i> Worli Sea Face, Mumbai</p>
+            <div class="pj-feat-footer">
+              <div>
+                <div class="pj-feat-price-label">Starting from</div>
+                <div class="pj-feat-price">₹8.9 Cr <span>onwards</span></div>
+              </div>
+              <div class="pj-feat-arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pj-feat-card medium" data-anim="feat-card">
+          <img src="images/projects-2.jpg" alt="Verdant Grove" />
+          <div class="pj-feat-status new"><span class="dot"></span> New Launch</div>
+          <div class="pj-feat-body">
+            <span class="pj-feat-type">Gated Villa Community</span>
+            <h3 class="pj-feat-title">Verdant Grove</h3>
+            <p class="pj-feat-loc"><i class="fas fa-map-marker-alt"></i> Sarjapur, Bangalore</p>
+            <div class="pj-feat-footer">
+              <div>
+                <div class="pj-feat-price-label">Starting from</div>
+                <div class="pj-feat-price">₹4.2 Cr <span>onwards</span></div>
+              </div>
+              <div class="pj-feat-arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pj-feat-card half" data-anim="feat-card">
+          <img src="images/projects-3.jpg" alt="Skyline Business Bay" />
+          <div class="pj-feat-status"><span class="dot"></span> 70% Sold</div>
+          <div class="pj-feat-body">
+            <span class="pj-feat-type">Commercial Tower</span>
+            <h3 class="pj-feat-title">Skyline Business Bay</h3>
+            <p class="pj-feat-loc"><i class="fas fa-map-marker-alt"></i> Cyber City, Gurgaon</p>
+            <div class="pj-feat-footer">
+              <div>
+                <div class="pj-feat-price-label">Starting from</div>
+                <div class="pj-feat-price">₹2.4 Cr <span>per unit</span></div>
+              </div>
+              <div class="pj-feat-arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pj-feat-card half" data-anim="feat-card">
+          <img src="images/projects-4.jpg" alt="Azure Bay Residences" />
+          <div class="pj-feat-status sold"><span class="dot"></span> 90% Sold</div>
+          <div class="pj-feat-body">
+            <span class="pj-feat-type">Premium Apartments</span>
+            <h3 class="pj-feat-title">Azure Bay Residences</h3>
+            <p class="pj-feat-loc"><i class="fas fa-map-marker-alt"></i> Marine Drive, Kochi</p>
+            <div class="pj-feat-footer">
+              <div>
+                <div class="pj-feat-price-label">Starting from</div>
+                <div class="pj-feat-price">₹1.8 Cr <span>onwards</span></div>
+              </div>
+              <div class="pj-feat-arrow"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 3: PROJECT TIMELINE (Progress bar) ========== -->
+    <section class="pj-timeline">
+      <div class="pj-timeline-header">
+        <h2 class="pj-section-title" data-anim="time-title">15 years of building landmarks</h2>
+        <p class="pj-section-sub" data-anim="time-sub">Milestones that shaped our skyline.</p>
+      </div>
+
+      <div class="pj-timeline-wrapper">
+        <div class="pj-timeline-axis" id="timelineAxis"></div>
+        <div class="pj-timeline-row">
+          <div class="pj-time-node" data-anim="time-node">
+            <div class="pj-time-marker"><i class="fas fa-seedling"></i></div>
+            <div class="pj-time-year">2010</div>
+            <h3 class="pj-time-title">Founded</h3>
+            <p class="pj-time-desc">Started with a single 40-unit residential block in Pune.</p>
+          </div>
+
+          <div class="pj-time-node" data-anim="time-node">
+            <div class="pj-time-marker"><i class="fas fa-city"></i></div>
+            <div class="pj-time-year">2015</div>
+            <h3 class="pj-time-title">First Township</h3>
+            <p class="pj-time-desc">Launched our first integrated township with 800+ homes.</p>
+          </div>
+
+          <div class="pj-time-node" data-anim="time-node">
+            <div class="pj-time-marker"><i class="fas fa-award"></i></div>
+            <div class="pj-time-year">2019</div>
+            <h3 class="pj-time-title">National Award</h3>
+            <p class="pj-time-desc">Recognized as "Best Luxury Developer" by NAR India.</p>
+          </div>
+
+          <div class="pj-time-node" data-anim="time-node">
+            <div class="pj-time-marker"><i class="fas fa-globe-asia"></i></div>
+            <div class="pj-time-year">2024</div>
+            <h3 class="pj-time-title">Pan-India</h3>
+            <p class="pj-time-desc">Operating across 12 cities with 24 active projects.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 4: PROJECT CATEGORIES (Tabs) ========== -->
+    <section class="pj-categories">
+      <div class="pj-cat-header">
+        <h2 class="pj-section-title" data-anim="cat-title">Browse by category</h2>
+        <p class="pj-section-sub" data-anim="cat-sub">Find the project that fits your lifestyle.</p>
+      </div>
+
+      <div class="pj-cat-tabs" data-anim="cat-tabs">
+        <button class="pj-cat-tab active" data-tab="residential"><i class="fas fa-home"></i> Residential</button>
+        <button class="pj-cat-tab" data-tab="commercial"><i class="fas fa-briefcase"></i> Commercial</button>
+        <button class="pj-cat-tab" data-tab="villas"><i class="fas fa-tree"></i> Villas</button>
+        <button class="pj-cat-tab" data-tab="mixed"><i class="fas fa-city"></i> Mixed Use</button>
+      </div>
+
+      <div class="pj-cat-panel active" data-panel="residential">
+        <div class="pj-cat-grid">
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-1.jpg" alt="Residential Project" />
+              <span class="pj-cat-badge">Ready to Move</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Meridian Heights</h3>
+              <p class="pj-cat-loc">📍 Hitech City, Hyderabad</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-bed"></i> 3-4 BHK</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 1850 sqft+</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹2.6 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-2.jpg" alt="Residential Project" />
+              <span class="pj-cat-badge">Under Construction</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Riverside Vista</h3>
+              <p class="pj-cat-loc">📍 Powai, Mumbai</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-bed"></i> 2-3 BHK</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 1250 sqft+</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹4.1 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-3.jpg" alt="Residential Project" />
+              <span class="pj-cat-badge">New Launch</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>The Crest Residences</h3>
+              <p class="pj-cat-loc">📍 Indiranagar, Bangalore</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-bed"></i> 3 BHK</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 1650 sqft+</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹2.2 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pj-cat-panel" data-panel="commercial">
+        <div class="pj-cat-grid">
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-4.jpg" alt="Commercial" />
+              <span class="pj-cat-badge">Grade A</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Nexus Business Hub</h3>
+              <p class="pj-cat-loc">📍 BKC, Mumbai</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-building"></i> Office Space</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 500-5000 sqft</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹3.2 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-5.jpg" alt="Commercial" />
+              <span class="pj-cat-badge">Pre-Leased</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>TechPark Square</h3>
+              <p class="pj-cat-loc">📍 Whitefield, Bangalore</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-briefcase"></i> IT Office</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 1200 sqft+</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹1.8 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-6.jpg" alt="Commercial" />
+              <span class="pj-cat-badge">Retail</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Galleria High Street</h3>
+              <p class="pj-cat-loc">📍 Jubilee Hills, Hyderabad</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-store"></i> Retail Shops</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 400-2000 sqft</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹2.4 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pj-cat-panel" data-panel="villas">
+        <div class="pj-cat-grid">
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-7.jpg" alt="Villa" />
+              <span class="pj-cat-badge">Limited</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Emerald Villas</h3>
+              <p class="pj-cat-loc">📍 Devanahalli, Bangalore</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-bed"></i> 4 BHK Villa</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 3800 sqft</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹5.8 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-8.jpg" alt="Villa" />
+              <span class="pj-cat-badge">Ready</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Lakeview Estates</h3>
+              <p class="pj-cat-loc">📍 Powai, Mumbai</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-bed"></i> 5 BHK Villa</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 5200 sqft</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹12.4 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-9.jpg" alt="Villa" />
+              <span class="pj-cat-badge">New</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Palm Grove Villas</h3>
+              <p class="pj-cat-loc">📍 ECR, Chennai</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-bed"></i> 3-4 BHK Villa</span>
+                <span class="pj-cat-spec"><i class="fas fa-ruler-combined"></i> 3200 sqft+</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹4.6 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pj-cat-panel" data-panel="mixed">
+        <div class="pj-cat-grid">
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-10.jpg" alt="Mixed Use" />
+              <span class="pj-cat-badge">Phased</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Skycity Township</h3>
+              <p class="pj-cat-loc">📍 Hinjewadi, Pune</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-home"></i> Residential</span>
+                <span class="pj-cat-spec"><i class="fas fa-store"></i> + Retail</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹1.6 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-11.jpg" alt="Mixed Use" />
+              <span class="pj-cat-badge">Live-Work</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>Urban Nest</h3>
+              <p class="pj-cat-loc">📍 Sector 79, Noida</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-home"></i> Apartments</span>
+                <span class="pj-cat-spec"><i class="fas fa-briefcase"></i> + Office</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹1.2 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="pj-cat-card" data-anim="cat-card">
+            <div class="pj-cat-img">
+              <img src="images/projects-cat-12.jpg" alt="Mixed Use" />
+              <span class="pj-cat-badge">Iconic</span>
+            </div>
+            <div class="pj-cat-body">
+              <h3>The Grand Central</h3>
+              <p class="pj-cat-loc">📍 Bandra Kurla, Mumbai</p>
+              <div class="pj-cat-specs">
+                <span class="pj-cat-spec"><i class="fas fa-hotel"></i> Hotel</span>
+                <span class="pj-cat-spec"><i class="fas fa-store"></i> + Mall</span>
+              </div>
+              <div class="pj-cat-footer">
+                <div class="pj-cat-price">₹6.8 Cr<span>+</span></div>
+                <a href="#" class="pj-cat-link">View <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 5: LOCATIONS EXPLORER ========== -->
+    <section class="pj-locations">
+      <div class="pj-locations-header">
+        <h2 class="pj-section-title" data-anim="loc-title">Explore by city</h2>
+        <p class="pj-section-sub" data-anim="loc-sub">
+          Click a city to see what we're building there.
+        </p>
+      </div>
+
+      <div class="pj-locations-grid">
+        <div class="pj-loc-list" data-anim="loc-list">
+          <button class="pj-loc-item active" data-city="mumbai">
+            <div class="pj-loc-icon"><i class="fas fa-water"></i></div>
+            <div class="pj-loc-text">
+              <strong>Mumbai</strong>
+              <span>8 active projects</span>
+            </div>
+          </button>
+          <button class="pj-loc-item" data-city="bangalore">
+            <div class="pj-loc-icon"><i class="fas fa-microchip"></i></div>
+            <div class="pj-loc-text">
+              <strong>Bangalore</strong>
+              <span>6 active projects</span>
+            </div>
+          </button>
+          <button class="pj-loc-item" data-city="hyderabad">
+            <div class="pj-loc-icon"><i class="fas fa-gem"></i></div>
+            <div class="pj-loc-text">
+              <strong>Hyderabad</strong>
+              <span>4 active projects</span>
+            </div>
+          </button>
+          <button class="pj-loc-item" data-city="pune">
+            <div class="pj-loc-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="pj-loc-text">
+              <strong>Pune</strong>
+              <span>3 active projects</span>
+            </div>
+          </button>
+          <button class="pj-loc-item" data-city="delhi">
+            <div class="pj-loc-icon"><i class="fas fa-landmark"></i></div>
+            <div class="pj-loc-text">
+              <strong>Delhi NCR</strong>
+              <span>2 active projects</span>
+            </div>
+          </button>
+          <button class="pj-loc-item" data-city="chennai">
+            <div class="pj-loc-icon"><i class="fas fa-umbrella-beach"></i></div>
+            <div class="pj-loc-text">
+              <strong>Chennai</strong>
+              <span>1 active project</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="pj-loc-visual" data-anim="loc-visual">
+          <img src="images/projects-city.jpg" alt="City View" id="cityImage" />
+          <div class="pj-loc-info">
+            <h3 id="cityTitle">Mumbai</h3>
+            <p id="cityDesc">
+              Where the ocean meets the skyline. Our Mumbai portfolio features
+              sea-facing towers, heritage-inspired residential estates, and
+              the most anticipated luxury launches of 2026.
+            </p>
+            <div class="pj-loc-tags">
+              <span class="pj-loc-tag">8 Projects</span>
+              <span class="pj-loc-tag">₹4,200 Cr Value</span>
+              <span class="pj-loc-tag">Since 2012</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 6: AWARDS / TRUST ========== -->
+    <section class="pj-awards">
+      <div class="pj-awards-inner">
+        <div class="pj-awards-header">
+          <h2 class="pj-section-title" data-anim="awards-title">Recognized across the industry</h2>
+          <p class="pj-section-sub" data-anim="awards-sub">
+            Awards, certifications, and trust marks that matter to homebuyers.
+          </p>
+        </div>
+
+        <div class="pj-awards-grid">
+          <div class="pj-award-card" data-anim="award-card">
+            <div class="pj-award-icon"><i class="fas fa-trophy"></i></div>
+            <h3>Best Luxury Developer</h3>
+            <p>National Real Estate Awards, for outstanding luxury residential design.</p>
+            <div class="pj-award-year">2024</div>
+          </div>
+
+          <div class="pj-award-card" data-anim="award-card">
+            <div class="pj-award-icon"><i class="fas fa-leaf"></i></div>
+            <h3>IGBC Platinum</h3>
+            <p>Green building certification across 6 of our largest developments.</p>
+            <div class="pj-award-year">2023</div>
+          </div>
+
+          <div class="pj-award-card" data-anim="award-card">
+            <div class="pj-award-icon"><i class="fas fa-shield-halved"></i></div>
+            <h3>RERA Certified</h3>
+            <p>All 24 projects fully RERA-registered with zero compliance flags.</p>
+            <div class="pj-award-year">Ongoing</div>
+          </div>
+
+          <div class="pj-award-card" data-anim="award-card">
+            <div class="pj-award-icon"><i class="fas fa-star"></i></div>
+            <h3>4.9/5 Buyer Rating</h3>
+            <p>Average across 8,400+ verified buyer reviews on our platform.</p>
+            <div class="pj-award-year">2025</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 7: FINAL CTA (Split magazine) ========== -->
+    <section class="pj-final">
+      <div class="pj-final-grid">
+        <div class="pj-final-left">
+          <span class="eyebrow" data-anim="final-eyebrow">Book a Site Visit</span>
+          <h2 data-anim="final-heading">
+            Walk through your <span class="grad">future home</span> before you buy.
+          </h2>
+          <p data-anim="final-para">
+            Book a private, no-pressure site visit at any of our 24 active
+            projects. Our project specialists will walk you through the
+            plans, amenities, and neighborhood — and answer every question.
+          </p>
+          <div class="pj-final-checklist" data-anim="final-checklist">
+            <div class="pj-final-check"><i class="fas fa-check"></i> Free pickup &amp; drop for site visits</div>
+            <div class="pj-final-check"><i class="fas fa-check"></i> 3D walkthrough of future units</div>
+            <div class="pj-final-check"><i class="fas fa-check"></i> Flexible payment plan consultation</div>
+          </div>
+          <div class="pj-final-actions" data-anim="final-actions">
+            <button class="pj-final-btn-primary">
+              <i class="fas fa-calendar-check"></i> Book a Site Visit
+            </button>
+            <button class="pj-final-btn-outline">
+              <i class="fas fa-download"></i> Download Brochure
+            </button>
+          </div>
+        </div>
+
+        <div class="pj-final-right" data-anim="final-right">
+          <img src="images/projects-final.jpg" alt="Site Visit" />
+          <div class="pj-final-float" data-anim="final-float">
+            <div class="pj-final-float-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+            <p>"The site visit sold us. Seeing the light and the layout in person made the decision instant."</p>
+            <strong>Neha &amp; Vikram S.</strong>
+            <span>Aurora Heights buyers</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer-container">
+
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <div class="logo-emblem">
+            <i class="fas fa-house-chimney"></i>
+          </div>
+          <div class="logo-text">
+            <div class="logo-main">
+              Estate<span class="brand-pro">Pro</span><span class="brand-dot">.</span>
+            </div>
+            <div class="logo-tagline">PREMIUM REAL ESTATE</div>
+          </div>
+        </a>
+
+        <p class="footer-about">
+          Your trusted partner in finding premium properties. We connect buyers, sellers, and agents with the best real estate opportunities since 2010.
+        </p>
+
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="buy property.html">Buy Property</a></li>
+          <li><a href="rent property.html">Rent Property</a></li>
+          <li><a href="sell property.html">Sell Property</a></li>
+          <li><a href="projects.html">Projects</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="agents.html">Our Agents</a></li>
+          <li><a href="contact.html#careers">Careers</a></li>
+          <li><a href="projects.html">Blog</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Help Center</a></li>
+          <li><a href="user-dashboard.html">User Dashboard</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="contact.html#faqs">FAQs</a></li>
+          <li><a href="#">Sitemap</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-newsletter">
+        <h4>Stay Updated</h4>
+        <p>Subscribe to get the latest property listings and market insights delivered to your inbox.</p>
+
+        <form class="newsletter-form" onsubmit="event.preventDefault();">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit">
+            <i class="fas fa-paper-plane"></i> Subscribe
+          </button>
+        </form>
+
+        <div class="newsletter-note">
+          <i class="fas fa-lock"></i> We respect your privacy. No spam.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <div class="footer-copy">
+          © 2026 <strong>Estate Pro.</strong> All rights reserved.
+        </div>
+
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookies</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    (function() {
+      /* ========== DARK / LIGHT MODE ========== */
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      const themeLabel = document.getElementById('themeLabel');
+      const mobileThemeIcon = document.getElementById('mobileThemeIcon');
+      const mobileThemeLabel = document.getElementById('mobileThemeLabel');
+
+      function applyTheme(isDark) {
+        if (isDark) {
+          body.classList.add('dark');
+          themeIcon.classList.replace('fa-moon', 'fa-sun');
+          themeLabel.textContent = 'Light Mode';
+          mobileThemeIcon.classList.replace('fa-moon', 'fa-sun');
+          mobileThemeLabel.textContent = 'Light Mode';
+        } else {
+          body.classList.remove('dark');
+          themeIcon.classList.replace('fa-sun', 'fa-moon');
+          themeLabel.textContent = 'Dark Mode';
+          mobileThemeIcon.classList.replace('fa-sun', 'fa-moon');
+          mobileThemeLabel.textContent = 'Dark Mode';
+        }
+      }
+
+      applyTheme(localStorage.getItem('theme') === 'dark');
+
+      function toggleTheme() {
+        const isDark = !body.classList.contains('dark');
+        applyTheme(isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      }
+
+      document.getElementById('darkModeBtn').addEventListener('click', toggleTheme);
+      document.getElementById('mobileDarkModeBtn').addEventListener('click', toggleTheme);
+
+      /* ========== RTL / LTR ========== */
+      const rtlBtn = document.getElementById('rtlBtn');
+      const mobileRtlBtn = document.getElementById('mobileRtlBtn');
+      const rtlLabel = document.getElementById('rtlLabel');
+
+      function applyDirection(isRtl) {
+        if (isRtl) {
+          document.documentElement.setAttribute('dir', 'rtl');
+          rtlLabel.textContent = 'LTR / RTL';
+          document.body.classList.add('rtl');
+        } else {
+          document.documentElement.setAttribute('dir', 'ltr');
+          rtlLabel.textContent = 'RTL / LTR';
+          document.body.classList.remove('rtl');
+        }
+      }
+
+      applyDirection(localStorage.getItem('direction') === 'rtl');
+
+      function toggleDirection() {
+        const isRtl = document.documentElement.getAttribute('dir') !== 'rtl';
+        applyDirection(isRtl);
+        localStorage.setItem('direction', isRtl ? 'rtl' : 'ltr');
+      }
+
+      rtlBtn.addEventListener('click', toggleDirection);
+      mobileRtlBtn.addEventListener('click', toggleDirection);
+
+      /* ========== DESKTOP DROPDOWNS ========== */
+      document.querySelectorAll('.dropdown').forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          document.querySelectorAll('.dropdown').forEach(d => {
+            if (d !== dropdown) d.classList.remove('open');
+          });
+          dropdown.classList.toggle('open');
+        });
+      });
+
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+      });
+
+      /* ========== MOBILE MENU ========== */
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+      const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+      function openMobileMenu() {
+        mobileMenu.classList.add('active');
+        mobileOverlay.classList.add('active');
+        hamburgerBtn.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenu() {
+        mobileMenu.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        hamburgerBtn.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (mobileMenu.classList.contains('active')) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      });
+      mobileCloseBtn.addEventListener('click', closeMobileMenu);
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+
+      /* ========== MOBILE DROPDOWNS ========== */
+      document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+          const submenu = this.nextElementSibling;
+          const isOpen = submenu.classList.contains('open');
+
+          document.querySelectorAll('.mobile-submenu').forEach(sm => sm.classList.remove('open'));
+          document.querySelectorAll('.mobile-dropdown-toggle').forEach(t => t.classList.remove('open'));
+
+          if (!isOpen) {
+            submenu.classList.add('open');
+            this.classList.add('open');
+          }
+        });
+      });
+
+      /* ========== MOBILE MENU LINK CLICK CLOSE ========== */
+      document.querySelectorAll('.mobile-nav-list a').forEach(link => {
+        link.addEventListener('click', () => {
+          closeMobileMenu();
+        });
+      });
+
+      /* ========== BACK TO TOP ========== */
+      const backToTop = document.getElementById('backToTop');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      /* ========== PREVENT DEMO LINK NAVIGATION ========== */
+      document.querySelectorAll('a[href="#"]').forEach(link => {
+        link.addEventListener('click', (e) => e.preventDefault());
+      });
+
+      /* ========== CATEGORY TABS ========== */
+      document.querySelectorAll('.pj-cat-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.tab;
+          document.querySelectorAll('.pj-cat-tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.pj-cat-panel').forEach(p => p.classList.remove('active'));
+          tab.classList.add('active');
+          const panel = document.querySelector(`.pj-cat-panel[data-panel="${target}"]`);
+          if (panel) panel.classList.add('active');
+
+          // Re-trigger animation for cards in the newly-active panel
+          const cards = panel.querySelectorAll('[data-anim="cat-card"]');
+          cards.forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(30px)";
+          });
+          if (window.Motion) {
+            window.Motion.animate(
+              cards,
+              { opacity: [0, 1], transform: ["translateY(30px)", "translateY(0px)"] },
+              { duration: 0.5, delay: window.Motion.stagger(0.08) }
+            );
+          }
+        });
+      });
+
+      /* ========== CITY LOCATION SWITCHER ========== */
+      const cityData = {
+        mumbai: {
+          img: "images/projects-city.jpg",
+          title: "Mumbai",
+          desc: "Where the ocean meets the skyline. Our Mumbai portfolio features sea-facing towers, heritage-inspired residential estates, and the most anticipated luxury launches of 2026.",
+          tags: ["8 Projects", "₹4,200 Cr Value", "Since 2012"]
+        },
+        bangalore: {
+          img: "images/projects-city-2.jpg",
+          title: "Bangalore",
+          desc: "India's Silicon Valley, reimagined. Tech-park adjacent residences, sustainable townships, and villas that blend greenery with modern design.",
+          tags: ["6 Projects", "₹2,800 Cr Value", "Since 2015"]
+        },
+        hyderabad: {
+          img: "images/projects-city-3.jpg",
+          title: "Hyderabad",
+          desc: "Where heritage meets high-tech. Our Hyderabad projects balance modern architecture with the city's rich cultural soul.",
+          tags: ["4 Projects", "₹1,600 Cr Value", "Since 2018"]
+        },
+        pune: {
+          img: "images/projects-city-4.jpg",
+          title: "Pune",
+          desc: "The intellectual capital. Our Pune portfolio serves young families, students, and professionals with thoughtfully designed communities.",
+          tags: ["3 Projects", "₹900 Cr Value", "Since 2010"]
+        },
+        delhi: {
+          img: "images/projects-city-5.jpg",
+          title: "Delhi NCR",
+          desc: "The nation's capital, our most ambitious frontier. High-rise residential and mixed-use towers setting new benchmarks for urban living.",
+          tags: ["2 Projects", "₹1,800 Cr Value", "Since 2020"]
+        },
+        chennai: {
+          img: "images/projects-city-6.jpg",
+          title: "Chennai",
+          desc: "Coastal living at its finest. Our Chennai projects bring the calm of the Bay of Bengal to premium residential design.",
+          tags: ["1 Project", "₹400 Cr Value", "Since 2022"]
+        }
+      };
+
+      document.querySelectorAll('.pj-loc-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const city = item.dataset.city;
+          const data = cityData[city];
+          if (!data) return;
+
+          document.querySelectorAll('.pj-loc-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          const img = document.getElementById('cityImage');
+          const title = document.getElementById('cityTitle');
+          const desc = document.getElementById('cityDesc');
+          const tags = document.querySelector('.pj-loc-tags');
+
+          if (img) {
+            img.style.opacity = "0";
+            setTimeout(() => {
+              img.src = data.img;
+              img.style.transition = "opacity 0.5s";
+              img.style.opacity = "1";
+            }, 150);
+          }
+          if (title) title.textContent = data.title;
+          if (desc) desc.textContent = data.desc;
+          if (tags) {
+            tags.innerHTML = data.tags.map(t => `<span class="pj-loc-tag">${t}</span>`).join('');
+          }
+        });
+      });
+    })();
+  </script>
+
+  <script type="module">
+    /* ============================================
+       ===== FRAMER MOTION (Motion One) =====
+       ============================================ */
+    import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+
+    /* ---------- SECTION 1: HERO — cinematic sequential entrance ---------- */
+    // Eyebrow: fade + scale-down pop
+    const heroEyebrow = document.querySelector('[data-anim="hero-eyebrow"]');
+    if (heroEyebrow) {
+      heroEyebrow.style.opacity = "0";
+      animate(heroEyebrow,
+        { opacity: [0, 1], transform: ["scale(1.2)", "scale(1)"] },
+        { duration: 0.7, easing: [0.22, 1, 0.36, 1] }
+      );
+    }
+
+    // Headline: 3D rotateY in from right (cinematic reveal)
+    const heroHeadline = document.querySelector('[data-anim="hero-headline"]');
+    if (heroHeadline) {
+      heroHeadline.style.opacity = "0";
+      heroHeadline.style.transformStyle = "preserve-3d";
+      animate(heroHeadline,
+        {
+          opacity: [0, 1],
+          transform: [
+            "perspective(1200px) rotateY(-70deg) translateX(120px)",
+            "perspective(1200px) rotateY(0deg) translateX(0px)"
+          ]
+        },
+        { duration: 1.2, delay: 0.2, easing: [0.22, 1, 0.36, 1] }
+      );
+    }
+
+    // Sub: fade up with blur-out
+    const heroSub = document.querySelector('[data-anim="hero-sub"]');
+    if (heroSub) {
+      heroSub.style.opacity = "0";
+      animate(heroSub,
+        { opacity: [0, 1], filter: ["blur(8px)", "blur(0px)"], transform: ["translateY(20px)", "translateY(0)"] },
+        { duration: 0.9, delay: 0.7 }
+      );
+    }
+
+    // CTAs: fade up
+    const heroCtas = document.querySelector('[data-anim="hero-ctas"]');
+    if (heroCtas) {
+      heroCtas.style.opacity = "0";
+      animate(heroCtas,
+        { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0)"] },
+        { duration: 0.7, delay: 1.0 }
+      );
+    }
+
+    // Stat cards: 4-card stagger with spring scale
+    const heroStats = document.querySelector('[data-anim="hero-stats"]');
+    if (heroStats) {
+      const statCards = heroStats.querySelectorAll(".pj-hero-stat");
+      statCards.forEach(el => el.style.opacity = "0");
+      animate(
+        statCards,
+        { opacity: [0, 1], transform: ["scale(0.6) translateY(30px)", "scale(1) translateY(0)"] },
+        { duration: 0.7, delay: stagger(0.12, { start: 1.2 }), easing: [0.34, 1.56, 0.64, 1] }
+      );
+    }
+
+    /* ---------- SECTION 2: FEATURED — diagonal cascade with blur reveal ---------- */
+    const featTitle = document.querySelector('[data-anim="feat-title"]');
+    const featSub = document.querySelector('[data-anim="feat-sub"]');
+    [featTitle, featSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.12 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const featCards = document.querySelectorAll('[data-anim="feat-card"]');
+    featCards.forEach(el => {
+      el.style.opacity = "0";
+      el.style.filter = "blur(12px)";
+    });
+    inView(".pj-featured-grid", () => {
+      animate(
+        featCards,
+        {
+          opacity: [0, 1],
+          filter: ["blur(12px)", "blur(0px)"],
+          transform: ["translateY(60px) scale(0.94)", "translateY(0) scale(1)"]
+        },
+        { duration: 0.9, delay: stagger(0.14), easing: [0.22, 1, 0.36, 1] }
+      );
+    }, { amount: 0.15 });
+
+    /* ---------- SECTION 3: TIMELINE — progress bar fill + node reveal ---------- */
+    const timeTitle = document.querySelector('[data-anim="time-title"]');
+    const timeSub = document.querySelector('[data-anim="time-sub"]');
+    [timeTitle, timeSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.12 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    // Progress bar fill animation
+    const timelineAxis = document.getElementById("timelineAxis");
+    if (timelineAxis) {
+      inView(timelineAxis, () => {
+        timelineAxis.classList.add("animated");
+      }, { amount: 0.5 });
+    }
+
+    // Timeline nodes: split from left/right + rotate-in markers
+    const timeNodes = document.querySelectorAll('[data-anim="time-node"]');
+    timeNodes.forEach(el => {
+      el.style.opacity = "0";
+      const marker = el.querySelector(".pj-time-marker");
+      if (marker) {
+        marker.style.opacity = "0";
+        marker.style.transform = "scale(0.4)";
+      }
+    });
+    inView(".pj-timeline-row", () => {
+      timeNodes.forEach((node, i) => {
+        const fromX = i % 2 === 0 ? -50 : 50;
+        animate(node,
+          { opacity: [0, 1], transform: [`translateX(${fromX}px)`, "translateX(0)"] },
+          { duration: 0.6, delay: i * 0.2 }
+        );
+        const marker = node.querySelector(".pj-time-marker");
+        if (marker) {
+          animate(marker,
+            { opacity: [0, 1], transform: ["scale(0.4) rotate(-45deg)", "scale(1) rotate(0deg)"] },
+            { duration: 0.8, delay: i * 0.2 + 0.2, easing: [0.34, 1.56, 0.64, 1] }
+          );
+        }
+      });
+    }, { amount: 0.2 });
+
+    /* ---------- SECTION 4: CATEGORIES — tabs slide + cards cascade (initial) ---------- */
+    const catTitle = document.querySelector('[data-anim="cat-title"]');
+    const catSub = document.querySelector('[data-anim="cat-sub"]');
+    [catTitle, catSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.12 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const catTabs = document.querySelector('[data-anim="cat-tabs"]');
+    if (catTabs) {
+      const tabs = catTabs.querySelectorAll(".pj-cat-tab");
+      tabs.forEach(t => {
+        t.style.opacity = "0";
+        t.style.transform = "translateY(20px)";
+      });
+      inView(catTabs, () => {
+        animate(
+          tabs,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0)"] },
+          { duration: 0.5, delay: stagger(0.08) }
+        );
+      }, { amount: 0.5 });
+    }
+
+    // Initial cascade for first panel's cards
+    const initialCatCards = document.querySelectorAll('.pj-cat-panel.active [data-anim="cat-card"]');
+    initialCatCards.forEach(el => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(30px)";
+    });
+    inView(".pj-cat-panel.active", () => {
+      animate(
+        initialCatCards,
+        { opacity: [0, 1], transform: ["translateY(30px)", "translateY(0px)"] },
+        { duration: 0.6, delay: stagger(0.1), easing: [0.22, 1, 0.36, 1] }
+      );
+    }, { amount: 0.2 });
+
+    /* ---------- SECTION 5: LOCATIONS — list items fade in sequence, visual slides ---------- */
+    const locTitle = document.querySelector('[data-anim="loc-title"]');
+    const locSub = document.querySelector('[data-anim="loc-sub"]');
+    [locTitle, locSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.12 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const locList = document.querySelector('[data-anim="loc-list"]');
+    if (locList) {
+      const items = locList.querySelectorAll(".pj-loc-item");
+      items.forEach(it => { it.style.opacity = "0"; it.style.transform = "translateX(-20px)"; });
+      inView(locList, () => {
+        animate(
+          items,
+          { opacity: [0, 1], transform: ["translateX(-20px)", "translateX(0)"] },
+          { duration: 0.5, delay: stagger(0.07), easing: [0.22, 1, 0.36, 1] }
+        );
+      }, { amount: 0.3 });
+    }
+
+    const locVisual = document.querySelector('[data-anim="loc-visual"]');
+    if (locVisual) {
+      locVisual.style.opacity = "0";
+      inView(locVisual, () => {
+        animate(locVisual,
+          { opacity: [0, 1], transform: ["translateX(40px) scale(0.96)", "translateX(0) scale(1)"] },
+          { duration: 0.9, easing: [0.22, 1, 0.36, 1] }
+        );
+      }, { amount: 0.2 });
+    }
+
+    /* ---------- SECTION 6: AWARDS — sequential fade with vertical drop ---------- */
+    const awardsTitle = document.querySelector('[data-anim="awards-title"]');
+    const awardsSub = document.querySelector('[data-anim="awards-sub"]');
+    [awardsTitle, awardsSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.12 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const awardCards = document.querySelectorAll('[data-anim="award-card"]');
+    awardCards.forEach(el => { el.style.opacity = "0"; });
+    inView(".pj-awards-grid", () => {
+      animate(
+        awardCards,
+        { opacity: [0, 1], transform: ["translateY(50px) rotateX(-15deg)", "translateY(0) rotateX(0deg)"] },
+        { duration: 0.8, delay: stagger(0.18), easing: [0.22, 1, 0.36, 1] }
+      );
+    }, { amount: 0.2 });
+
+    /* ---------- SECTION 7: FINAL — sequential left-column + right visual fade ---------- */
+    const finalEyebrow = document.querySelector('[data-anim="final-eyebrow"]');
+    const finalHeading = document.querySelector('[data-anim="final-heading"]');
+    const finalPara = document.querySelector('[data-anim="final-para"]');
+    const finalChecklist = document.querySelector('[data-anim="final-checklist"]');
+    const finalActions = document.querySelector('[data-anim="final-actions"]');
+
+    inView(".pj-final-left", () => {
+      const seq = [finalEyebrow, finalHeading, finalPara, finalChecklist, finalActions];
+      seq.forEach((el, i) => {
+        if (!el) return;
+        el.style.opacity = "0";
+        animate(el,
+          { opacity: [0, 1], transform: ["translateX(-30px)", "translateX(0)"] },
+          { duration: 0.6, delay: i * 0.15, easing: [0.22, 1, 0.36, 1] }
+        );
+      });
+    }, { amount: 0.3 });
+
+    const finalRight = document.querySelector('[data-anim="final-right"]');
+    if (finalRight) {
+      finalRight.style.opacity = "0";
+      inView(finalRight, () => {
+        animate(finalRight,
+          { opacity: [0, 1] },
+          { duration: 1, delay: 0.4 }
+        );
+      }, { amount: 0.2 });
+    }
+
+    const finalFloat = document.querySelector('[data-anim="final-float"]');
+    if (finalFloat) {
+      finalFloat.style.opacity = "0";
+      inView(finalFloat, () => {
+        animate(finalFloat,
+          { opacity: [0, 1], transform: ["scale(0.7) translateY(30px)", "scale(1) translateY(0)"] },
+          { duration: 0.8, delay: 0.6, easing: [0.34, 1.56, 0.64, 1] }
+        );
+      }, { amount: 0.4 });
+    }
+  </script>
+</body>
+</html>

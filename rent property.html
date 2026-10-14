@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estate Pro · Rent Property</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script type="module">
+    import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+    window.Motion = { animate, inView, stagger };
+  </script>
+  <style>
+    /* ========== GLOBAL RESET ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* ========== THEME VARIABLES — VIOLET + PINK ========== */
+    :root {
+      --nav-bg: #ffffff;
+      --bg-body: #faf8ff;
+      --footer-bg: #ffffff;
+      --footer-bottom-bg: #f5f0ff;
+      --text-primary: #1e1033;
+      --text-secondary: #554669;
+      --text-muted: #8577a0;
+      --border-light: #ede5fa;
+      --hover-bg: #f6f1ff;
+
+      --brand: #7c3aed;
+      --brand-dark: #6d28d9;
+      --brand-light: #a855f7;
+      --brand-soft: #ede9fe;
+      --brand-soft-text: #7c3aed;
+
+      --brand-accent: #ec4899;
+      --brand-accent-dark: #db2777;
+
+      --shadow-nav: 0 1px 8px rgba(124, 58, 237, 0.06);
+      --dropdown-bg: #ffffff;
+      --dropdown-shadow: 0 12px 28px rgba(124, 58, 237, 0.14);
+      --mobile-menu-bg: #ffffff;
+      --social-bg: #f4eeff;
+
+      /* Rent page local tokens */
+      --rp-card-bg: #ffffff;
+      --rp-section-alt: #ffffff;
+      --rp-gradient-soft: linear-gradient(135deg, #f8f9ff 0%, #eef1ff 100%);
+      --rp-glass: rgba(255, 255, 255, 0.85);
+    }
+
+    body.dark {
+      --nav-bg: #150b25;
+      --bg-body: #0a0512;
+      --footer-bg: #150b25;
+      --footer-bottom-bg: #100720;
+      --text-primary: #f5f0ff;
+      --text-secondary: #c4b5d9;
+      --text-muted: #8a7aa5;
+      --border-light: #2a1b45;
+      --hover-bg: #1e1233;
+
+      --brand: #a855f7;
+      --brand-dark: #7c3aed;
+      --brand-light: #c084fc;
+      --brand-soft: #2e1a4d;
+      --brand-soft-text: #c084fc;
+
+      --brand-accent: #f472b6;
+      --brand-accent-dark: #ec4899;
+
+      --shadow-nav: 0 1px 8px rgba(0, 0, 0, 0.5);
+      --dropdown-bg: #1e1233;
+      --dropdown-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+      --mobile-menu-bg: #150b25;
+      --social-bg: #1e1233;
+
+      --rp-card-bg: #1a1a2e;
+      --rp-section-alt: #12121f;
+      --rp-gradient-soft: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      --rp-glass: rgba(26, 26, 46, 0.85);
+    }
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+      background-color: var(--nav-bg);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: var(--shadow-nav);
+      padding: 0 2.5rem;
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      gap: 2rem;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+      text-decoration: none;
+      padding-right: 1.5rem;
+    }
+
+    .logo-emblem {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #a855f7 0%, #6d28d9 100%);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover .logo-emblem { transform: rotate(-6deg) scale(1.05); }
+
+    .logo-emblem::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+      transform: rotate(25deg);
+      pointer-events: none;
+    }
+
+    .logo-emblem i { font-size: 1.35rem; color: #ffffff; z-index: 2; position: relative; }
+
+    .logo-emblem::after {
+      content: '';
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 9px; height: 9px;
+      background: var(--brand-accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px var(--nav-bg);
+      z-index: 3;
+      transition: box-shadow 0.3s;
+    }
+
+    body.dark .logo-emblem::after { box-shadow: 0 0 0 2px #150b25; }
+
+    .logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+
+    .logo-main {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--text-primary);
+      white-space: nowrap;
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .logo-main .brand-pro { color: var(--brand); font-weight: 800; }
+    .logo-main .brand-dot { color: var(--brand-accent); font-size: 1.7rem; line-height: 1; }
+
+    .logo-tagline {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 3px;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      list-style: none;
+      margin: 0;
+      flex: 1 1 auto;
+      white-space: nowrap;
+      padding: 0;
+      overflow: visible;
+      min-width: 0;
+    }
+
+    .nav-links > li { position: relative; flex-shrink: 0; }
+
+    .nav-links a,
+    .nav-links .dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.6rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-links a:hover,
+    .nav-links .dropdown-toggle:hover {
+      background-color: var(--hover-bg);
+      color: var(--brand);
+    }
+
+    .nav-links .active-pill a,
+    .nav-links .active-pill .dropdown-toggle {
+      background-color: var(--brand-soft);
+      color: var(--brand-soft-text);
+      font-weight: 600;
+    }
+
+    .dropdown { position: relative; }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      min-width: 210px;
+      background-color: var(--dropdown-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      box-shadow: var(--dropdown-shadow);
+      padding: 0.5rem;
+      list-style: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+      z-index: 1200;
+      pointer-events: none;
+    }
+
+    .dropdown:hover .dropdown-menu,
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .dropdown-menu li a {
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .dropdown-menu li a:hover { background-color: var(--hover-bg); color: var(--brand); }
+    .dropdown-menu li a i { width: 16px; font-size: 0.8rem; color: var(--text-muted); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--border-light);
+      height: 44px;
+    }
+
+    .outline-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1.5px solid var(--border-light);
+      border-radius: 30px;
+      padding: 0.55rem 1.15rem;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .outline-pill i { font-size: 0.85rem; color: var(--text-muted); }
+    .outline-pill:hover { background-color: var(--hover-bg); border-color: var(--brand); color: var(--brand); }
+    .outline-pill:hover i { color: var(--brand); }
+
+    .btn-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      border: none;
+      border-radius: 40px;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+      transition: all 0.15s;
+    }
+
+    .btn-brand i { font-size: 0.9rem; color: white; }
+    .btn-brand:hover { transform: scale(1.03); box-shadow: 0 8px 20px rgba(124, 58, 237, 0.45); }
+
+    .hamburger {
+      display: none;
+      background: transparent;
+      border: 1.5px solid var(--border-light);
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .hamburger:hover { background-color: var(--hover-bg); }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background-color: var(--text-primary);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ========== MOBILE MENU ========== */
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 8, 40, 0.55);
+      z-index: 1500;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .mobile-overlay.active {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 340px;
+      max-width: 85vw;
+      height: 100vh;
+      background-color: var(--mobile-menu-bg);
+      z-index: 1600;
+      overflow-y: auto;
+      padding: 1.5rem;
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -8px 0 30px rgba(20, 8, 40, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .mobile-menu.active { right: 0; }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 0.75rem;
+    }
+
+    .mobile-menu-header .logo-main { font-size: 1.15rem; }
+
+    .mobile-close {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .mobile-close:hover { background-color: var(--hover-bg); }
+
+    .mobile-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-nav-list > li { width: 100%; }
+
+    .mobile-nav-list a,
+    .mobile-nav-list .mobile-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0.95rem 1.1rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      text-align: left;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .mobile-nav-list a:hover,
+    .mobile-nav-list .mobile-dropdown-toggle:hover {
+      background-color: var(--hover-bg);
+      color: var(--brand);
+    }
+
+    .mobile-nav-list .mobile-dropdown-toggle .chevron {
+      transition: transform 0.25s;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .mobile-nav-list .mobile-dropdown-toggle.open .chevron { transform: rotate(180deg); }
+
+    .mobile-submenu {
+      list-style: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding-left: 0.75rem;
+    }
+
+    .mobile-submenu.open { max-height: 300px; }
+
+    .mobile-submenu li a {
+      padding: 0.7rem 1.1rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      border-radius: 10px;
+    }
+
+    .mobile-submenu li a:hover { background-color: var(--hover-bg); color: var(--brand); }
+
+    .mobile-actions {
+      margin-top: auto;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mobile-actions .outline-pill,
+    .mobile-actions .btn-brand { width: 100%; justify-content: center; padding: 0.85rem 1rem; font-size: 0.9rem; }
+
+    /* ================================================================
+       ===============  RENT PROPERTY PAGE CONTENT  ===================
+       ================================================================ */
+    .rent-property-page {
+      width: 100%;
+      overflow-x: hidden;
+      background: var(--bg-body);
+      color: var(--text-primary);
+    }
+
+    /* ---------- SECTION 1: HERO — Center Stage (different from Buy) ---------- */
+    .rp-hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 5% 60px;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(168, 85, 247, 0.15), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.12), transparent 55%),
+        var(--bp-gradient-soft, var(--rp-gradient-soft));
+    }
+    .rp-hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .rp-hero-orb.one {
+      width: 380px; height: 380px;
+      background: var(--brand-light);
+      top: -100px; left: -100px;
+    }
+    .rp-hero-orb.two {
+      width: 300px; height: 300px;
+      background: var(--brand-accent);
+      bottom: -80px; right: -80px;
+    }
+    .rp-hero-content {
+      position: relative; z-index: 2;
+      max-width: 900px;
+    }
+    .rp-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: var(--rp-glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-light);
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--brand);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
+    }
+    .rp-hero-eyebrow .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--brand-accent);
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.25);
+    }
+    .rp-hero-headline {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      color: var(--text-primary);
+      margin-bottom: 22px;
+    }
+    .rp-hero-headline .accent {
+      background: linear-gradient(90deg, var(--brand-light), var(--brand), var(--brand-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .rp-hero-sub {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto 40px;
+    }
+
+    /* Center search bar with 3 tabs */
+    .rp-search-card {
+      background: var(--rp-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 8px;
+      max-width: 780px;
+      margin: 0 auto;
+      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.15);
+    }
+    .rp-search-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      background: var(--hover-bg);
+      border-radius: 18px;
+      margin-bottom: 6px;
+    }
+    .rp-search-tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+    .rp-search-tab.active {
+      background: var(--rp-card-bg);
+      color: var(--brand);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.12);
+    }
+    .rp-search-row {
+      display: flex;
+      gap: 6px;
+      padding: 4px;
+      align-items: center;
+    }
+    .rp-search-field {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--rp-card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      transition: border-color 0.2s;
+      min-width: 0;
+    }
+    .rp-search-field:focus-within { border-color: var(--brand); }
+    .rp-search-field i { color: var(--brand); font-size: 0.95rem; flex-shrink: 0; }
+    .rp-search-field input,
+    .rp-search-field select {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.92rem;
+      color: var(--text-primary);
+      font-family: inherit;
+      min-width: 0;
+    }
+    .rp-search-field input::placeholder { color: var(--text-muted); }
+    .rp-search-btn {
+      padding: 15px 28px;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
+      transition: transform 0.2s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .rp-search-btn:hover { transform: scale(1.04); }
+
+    .rp-hero-trust {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .rp-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .rp-trust-item i {
+      color: var(--brand);
+      font-size: 1rem;
+    }
+
+    /* ---------- SECTION 2: FILTER CHIPS + Listing Cards (masonry) ---------- */
+    .rp-listings {
+      padding: 80px 5%;
+      background: var(--rp-section-alt);
+    }
+    .rp-listings-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: 1300px;
+      margin: 0 auto 40px;
+      flex-wrap: wrap;
+    }
+    .rp-listings-title {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.8px;
+    }
+    .rp-listings-sub {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .rp-chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rp-chip {
+      padding: 8px 16px;
+      background: var(--rp-card-bg);
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+    .rp-chip:hover { border-color: var(--brand); color: var(--brand); }
+    .rp-chip.active {
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
+    }
+
+    .rp-masonry {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 200px;
+      gap: 20px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .rp-masonry-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--rp-card-bg);
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .rp-masonry-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(124, 58, 237, 0.18);
+    }
+    .rp-masonry-card.tall { grid-row: span 2; }
+    .rp-masonry-card.wide { grid-column: span 2; }
+    .rp-masonry-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .rp-masonry-card:hover img { transform: scale(1.08); }
+    .rp-masonry-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20, 8, 40, 0.85) 0%, rgba(20, 8, 40, 0.2) 55%, transparent 100%);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: #fff;
+    }
+    .rp-masonry-tag {
+      position: absolute;
+      top: 16px; left: 16px;
+      padding: 6px 14px;
+      background: var(--rp-glass);
+      backdrop-filter: blur(10px);
+      color: var(--brand);
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1px solid var(--border-light);
+    }
+    .rp-masonry-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .rp-masonry-meta {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 10px;
+    }
+    .rp-masonry-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .rp-masonry-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .rp-masonry-price span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .rp-masonry-icon {
+      width: 38px; height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(10px);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* ---------- SECTION 3: ROOMMATE / LIFESTYLE MATCH ---------- */
+    .rp-lifestyle {
+      padding: 90px 5%;
+      background: var(--rp-gradient-soft);
+    }
+    .rp-lifestyle-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .rp-lifestyle-visual {
+      position: relative;
+      height: 520px;
+    }
+    .rp-life-img {
+      position: absolute;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.2);
+      border: 3px solid var(--rp-card-bg);
+    }
+    .rp-life-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .rp-life-img.one { top: 0; left: 0; width: 65%; height: 60%; z-index: 2; }
+    .rp-life-img.two { bottom: 0; right: 0; width: 55%; height: 55%; z-index: 3; }
+    .rp-life-img.three {
+      top: 30%; right: 5%;
+      width: 32%; height: 32%;
+      z-index: 1;
+      border-radius: 50%;
+    }
+    .rp-life-badge {
+      position: absolute;
+      top: 40%;
+      left: -10px;
+      padding: 14px 22px;
+      background: var(--rp-glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.2);
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .rp-life-badge i {
+      font-size: 1.4rem;
+      color: var(--brand);
+    }
+    .rp-life-badge-text strong { display: block; font-size: 0.95rem; color: var(--text-primary); }
+    .rp-life-badge-text span { font-size: 0.75rem; color: var(--text-muted); }
+
+    .rp-lifestyle-copy .eyebrow {
+      display: inline-block;
+      padding: 6px 14px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    .rp-lifestyle-copy h2 {
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 18px;
+      letter-spacing: -0.8px;
+    }
+    .rp-lifestyle-copy h2 span {
+      background: linear-gradient(90deg, var(--brand-light), var(--brand-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .rp-lifestyle-copy p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+    .rp-lifestyle-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .rp-lf-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: var(--rp-card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .rp-lf-item:hover {
+      border-color: var(--brand);
+      transform: translateX(4px);
+    }
+    .rp-lf-icon {
+      width: 38px; height: 38px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-radius: 10px;
+      font-size: 0.95rem;
+    }
+    .rp-lf-text strong {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .rp-lf-text span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .rp-lifestyle-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
+      transition: transform 0.2s;
+      font-family: inherit;
+    }
+    .rp-lifestyle-cta:hover { transform: translateY(-3px); }
+
+    /* ---------- SECTION 4: HOW RENTING WORKS (horizontal stepped) ---------- */
+    .rp-how {
+      padding: 90px 5%;
+      background: var(--rp-section-alt);
+    }
+    .rp-how-header {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+    .rp-how-header h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.8px;
+    }
+    .rp-how-header p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .rp-how-track {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px 40px;
+      padding: 0 10px;
+    }
+    .rp-how-line {
+      position: absolute;
+      top: 40px;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      background: repeating-linear-gradient(
+        to right,
+        var(--brand) 0,
+        var(--brand) 10px,
+        transparent 10px,
+        transparent 20px
+      );
+      opacity: 0.4;
+      z-index: 0;
+    }
+    .rp-how-step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 8px;
+    }
+    .rp-how-circle {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--rp-card-bg);
+      border: 2px solid var(--border-light);
+      border-radius: 50%;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .rp-how-step:hover .rp-how-circle {
+      border-color: var(--brand);
+      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.25);
+      transform: scale(1.06);
+    }
+    .rp-how-circle i {
+      font-size: 1.6rem;
+      color: var(--brand);
+    }
+    .rp-how-num {
+      position: absolute;
+      top: -8px; right: -8px;
+      width: 30px; height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      border-radius: 50%;
+      border: 3px solid var(--rp-section-alt);
+    }
+    .rp-how-step h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .rp-how-step p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 260px;
+      margin: 0 auto;
+    }
+
+    /* ---------- SECTION 5: NEIGHBORHOOD SPOTLIGHT (3 columns) ---------- */
+    .rp-hoods {
+      padding: 90px 5%;
+      background: var(--rp-gradient-soft);
+    }
+    .rp-hoods-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .rp-hoods-header h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.8px;
+    }
+    .rp-hoods-header p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .rp-hoods-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .rp-hood-card {
+      position: relative;
+      height: 460px;
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 15px 35px rgba(124, 58, 237, 0.15);
+      transition: transform 0.4s;
+    }
+    .rp-hood-card:hover { transform: translateY(-8px); }
+    .rp-hood-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .rp-hood-card:hover img { transform: scale(1.1); }
+    .rp-hood-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(20, 8, 40, 0.9) 0%, rgba(20, 8, 40, 0.15) 55%, transparent 100%);
+    }
+    .rp-hood-body {
+      position: absolute;
+      inset: 0;
+      padding: 30px 26px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: #fff;
+    }
+    .rp-hood-emoji {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 52px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .rp-hood-card h3 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.4px;
+    }
+    .rp-hood-card .tagline {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 18px;
+    }
+    .rp-hood-stats {
+      display: flex;
+      gap: 14px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .rp-hood-stat {
+      flex: 1;
+    }
+    .rp-hood-stat strong {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+    .rp-hood-stat span {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ---------- SECTION 6: TENANT PERKS / TRUST BAND ---------- */
+    .rp-perks {
+      padding: 90px 5%;
+      background: var(--rp-section-alt);
+      position: relative;
+      overflow: hidden;
+    }
+    .rp-perks::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(circle, var(--brand) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+    .rp-perks-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .rp-perks-header {
+      text-align: center;
+      margin-bottom: 55px;
+    }
+    .rp-perks-header h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.8px;
+    }
+    .rp-perks-header p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .rp-perks-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .rp-perk {
+      padding: 30px 24px;
+      background: var(--rp-card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      text-align: left;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .rp-perk::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--brand-light), var(--brand-accent));
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.4s;
+    }
+    .rp-perk:hover {
+      transform: translateY(-6px);
+      border-color: var(--brand);
+      box-shadow: 0 18px 36px rgba(124, 58, 237, 0.15);
+    }
+    .rp-perk:hover::before { transform: scaleY(1); }
+    .rp-perk-icon {
+      width: 52px; height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-radius: 14px;
+      font-size: 1.25rem;
+      margin-bottom: 18px;
+    }
+    .rp-perk h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .rp-perk p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* ---------- SECTION 7: TENANT REVIEWS (carousel-style) ---------- */
+    .rp-reviews {
+      padding: 90px 5%;
+      background: var(--rp-gradient-soft);
+    }
+    .rp-reviews-header {
+      text-align: center;
+      margin-bottom: 55px;
+    }
+    .rp-reviews-header h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.8px;
+    }
+    .rp-reviews-header p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .rp-reviews-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .rp-review {
+      padding: 32px 28px;
+      background: var(--rp-card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 22px;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .rp-review:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+    }
+    .rp-review-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 16px;
+      color: #facc15;
+      font-size: 0.9rem;
+    }
+    .rp-review-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .rp-review-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-light);
+    }
+    .rp-review-author img {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--brand-soft);
+    }
+    .rp-review-author strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    .rp-review-author span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .rp-review-quote-icon {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 2rem;
+      color: var(--brand);
+      opacity: 0.15;
+    }
+
+    /* ---------- Responsive for Rent Page ---------- */
+    @media (max-width: 1100px) {
+      .rp-masonry { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 180px; }
+      .rp-lifestyle-grid { grid-template-columns: 1fr; gap: 40px; }
+      .rp-lifestyle-visual { height: 420px; }
+      .rp-how-track { grid-template-columns: repeat(2, 1fr); }
+      .rp-how-line { display: none; }
+      .rp-hoods-grid { grid-template-columns: 1fr 1fr; }
+      .rp-perks-grid { grid-template-columns: repeat(2, 1fr); }
+      .rp-reviews-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .rp-hero { min-height: auto; padding: 80px 5% 60px; }
+      .rp-search-row { flex-direction: column; }
+      .rp-search-btn { justify-content: center; width: 100%; }
+      .rp-masonry { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 170px; }
+      .rp-masonry-card.wide { grid-column: span 2; }
+      .rp-masonry-card.tall { grid-row: span 1; }
+      .rp-lifestyle-features { grid-template-columns: 1fr; }
+      .rp-lifestyle-visual { height: 360px; }
+      .rp-how-track { grid-template-columns: 1fr; gap: 40px; }
+      .rp-hoods-grid { grid-template-columns: 1fr; }
+      .rp-perks-grid { grid-template-columns: 1fr; }
+      .rp-reviews-row { grid-template-columns: 1fr; }
+      .rp-listings-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .rp-masonry { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+      .rp-masonry-card.wide { grid-column: span 1; }
+      .rp-hero-trust { gap: 18px; }
+      .rp-trust-item { font-size: 0.8rem; }
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      background-color: var(--footer-bg);
+      border-top: 1px solid var(--border-light);
+      padding: 4rem 2.5rem 0;
+      color: var(--text-secondary);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr 1.4fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .footer-brand .logo {
+      padding-right: 0;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-brand .logo-emblem {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+    }
+
+    .footer-brand .logo-emblem i { font-size: 1.2rem; }
+    .footer-brand .logo-main { font-size: 1.3rem; }
+    .footer-brand .logo-tagline { font-size: 0.55rem; }
+
+    .footer-about {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      max-width: 340px;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background-color: var(--social-bg);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .social-btn:hover {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(124, 58, 237, 0.35);
+    }
+
+    .footer-col h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.2px;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 30px;
+      height: 2.5px;
+      background: linear-gradient(90deg, var(--brand) 0%, var(--brand-accent) 100%);
+      border-radius: 2px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .footer-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.15s, padding-left 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-col ul li a::before {
+      content: '';
+      width: 0;
+      height: 1.5px;
+      background-color: var(--brand);
+      transition: width 0.2s;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--brand);
+      padding-left: 4px;
+    }
+
+    .footer-col ul li a:hover::before { width: 12px; }
+
+    .footer-newsletter p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      background-color: var(--social-bg);
+      border: 1.5px solid var(--border-light);
+      border-radius: 40px;
+      padding: 4px;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+    }
+
+    .newsletter-form:focus-within {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-soft);
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0.65rem 1rem;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      font-family: inherit;
+      min-width: 0;
+    }
+
+    .newsletter-form input::placeholder { color: var(--text-muted); }
+
+    .newsletter-form button {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      border: none;
+      border-radius: 40px;
+      padding: 0.65rem 1.2rem;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .newsletter-form button:hover { transform: scale(1.03); }
+
+    .newsletter-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .newsletter-note i { color: var(--brand); }
+
+    .footer-bottom {
+      background-color: var(--footer-bottom-bg);
+      border-top: 1px solid var(--border-light);
+      padding: 1.5rem 2.5rem;
+      margin: 0 -2.5rem;
+    }
+
+    .footer-bottom-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-copy strong { color: var(--brand); font-weight: 600; }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom-links a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-bottom-links a:hover { color: var(--brand); }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.45);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      z-index: 900;
+    }
+
+    .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .back-to-top:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(124, 58, 237, 0.55); }
+
+    /* ========== RESPONSIVE (nav + footer) ========== */
+    @media (max-width: 1200px) {
+            .nav-links,
+      .nav-actions .btn-brand { display: none; }
+
+      .hamburger {
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+      .mobile-overlay { display: block; }
+      .navbar { padding: 0 1.5rem; gap: 10px; }
+      .logo-tagline { display: none; }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        gap: 8px;
+        padding-left: 0;
+        border-left: none;
+      }
+      html[dir="rtl"] .nav-actions {
+        margin-left: 0;
+        margin-right: auto;
+      }
+      .outline-pill {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border-radius: 50%;
+        justify-content: center;
+      }
+      .outline-pill #themeLabel,
+      .outline-pill #rtlLabel,
+      .outline-pill span {
+        display: none;
+      }
+      .outline-pill i {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .footer-container {
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 2.5rem;
+      }
+
+      .footer-newsletter { grid-column: 1 / -1; max-width: 480px; }
+    }
+
+    @media (max-width: 900px) {
+      .footer-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+      }
+
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-newsletter { grid-column: 1 / -1; max-width: 100%; }
+    }
+
+    @media (max-width: 600px) {
+      .footer { padding: 3rem 1.25rem 0; }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding-bottom: 2rem;
+      }
+
+      .footer-bottom {
+        margin: 0 -1.25rem;
+        padding: 1.25rem 1.25rem;
+      }
+
+      .footer-bottom-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-bottom-links { justify-content: center; }
+    }
+
+        @media (max-width: 480px) {
+      .logo-tagline { display: none; }
+      .logo-main { font-size: 1.15rem; }
+      .logo-emblem { width: 38px; height: 38px; border-radius: 11px; }
+      .logo-emblem i { font-size: 1.05rem; }
+      .navbar { height: 66px; padding: 0 14px; }
+      .nav-actions { gap: 6px; }
+      .outline-pill, .hamburger { width: 36px; height: 36px; }
+      .back-to-top { bottom: 20px; right: 20px; width: 42px; height: 42px; }
+    }
+
+    @media (min-width: 1201px) and (max-width: 1400px) {
+      .navbar { padding: 0 1.5rem; gap: 1.5rem; }
+      .nav-links a,
+      .nav-links .dropdown-toggle {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.84rem;
+      }
+      .outline-pill { padding: 0.5rem 0.9rem; font-size: 0.79rem; }
+      .btn-brand { padding: 0.6rem 1.15rem; font-size: 0.83rem; }
+      .nav-actions { gap: 8px; padding-left: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <div class="logo-emblem">
+        <i class="fas fa-house-chimney"></i>
+      </div>
+      <div class="logo-text">
+        <div class="logo-main">
+          Estate<span class="brand-pro">Pro</span><span class="brand-dot">.</span>
+        </div>
+        <div class="logo-tagline">PREMIUM REAL ESTATE</div>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button">
+          Home <i class="fas fa-chevron-down" style="font-size: 0.65rem;"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="index.html"><i class="fas fa-door-open"></i> Home 1</a></li>
+          <li><a href="home2.html"><i class="fas fa-door-open"></i> Home 2</a></li>
+        </ul>
+      </li>
+
+      <li><a href="buy property.html">Buy Property</a></li>
+      <li class="active-pill"><a href="rent property.html">Rent Property</a></li>
+      <li><a href="sell property.html">Sell Property</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="agents.html">Agents</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button">
+          Dashboard <i class="fas fa-chevron-down" style="font-size: 0.65rem;"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="user-dashboard.html"><i class="fas fa-user"></i> User Dashboard</a></li>
+          <li><a href="admin-dashboard.html"><i class="fas fa-crown"></i> Admin Dashboard</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="outline-pill" id="darkModeBtn" type="button">
+        <i class="fas fa-moon" id="themeIcon"></i> <span id="themeLabel">Dark Mode</span>
+      </button>
+
+      <button class="outline-pill" id="rtlBtn" type="button">
+        <i class="fas fa-arrow-right-arrow-left"></i> <span id="rtlLabel">RTL / LTR</span>
+      </button>
+
+      <a href="login.html" class="btn-brand">
+        <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+      </a>
+    </div>
+
+    <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ================= MOBILE OVERLAY ================= -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- ================= MOBILE MENU ================= -->
+  <aside class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <a href="index.html" class="logo" style="gap: 10px; padding-right: 0;">
+        <div class="logo-emblem" style="width:38px;height:38px;border-radius:11px;">
+          <i class="fas fa-house-chimney" style="font-size:1.05rem;"></i>
+        </div>
+        <div class="logo-main" style="font-size:1.05rem;">
+          Estate<span class="brand-pro">Pro</span><span class="brand-dot">.</span>
+        </div>
+      </a>
+      <button class="mobile-close" id="mobileCloseBtn" type="button" aria-label="Close menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li>
+        <button class="mobile-dropdown-toggle" type="button">
+          Home <i class="fas fa-chevron-down chevron"></i>
+        </button>
+        <ul class="mobile-submenu">
+          <li><a href="index.html">Home 1</a></li>
+          <li><a href="home2.html">Home 2</a></li>
+        </ul>
+      </li>
+
+      <li><a href="buy property.html">Buy Property</a></li>
+      <li><a href="rent property.html">Rent Property</a></li>
+      <li><a href="sell property.html">Sell Property</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="agents.html">Agents</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+
+      <li>
+        <button class="mobile-dropdown-toggle" type="button">
+          Dashboard <i class="fas fa-chevron-down chevron"></i>
+        </button>
+        <ul class="mobile-submenu">
+          <li><a href="user-dashboard.html">User Dashboard</a></li>
+          <li><a href="admin-dashboard.html">Admin Dashboard</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="mobile-actions">
+      <button class="outline-pill" id="mobileDarkModeBtn" type="button">
+        <i class="fas fa-moon" id="mobileThemeIcon"></i> <span id="mobileThemeLabel">Dark Mode</span>
+      </button>
+
+      <button class="outline-pill" id="mobileRtlBtn" type="button">
+        <i class="fas fa-arrow-right-arrow-left"></i> <span>RTL / LTR</span>
+      </button>
+
+      <a href="login.html" class="btn-brand">
+        <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= RENT PROPERTY PAGE ================= -->
+  <main class="rent-property-page">
+
+    <!-- ========== SECTION 1: HERO (Center Stage + Search) ========== -->
+    <section class="rp-hero">
+      <div class="rp-hero-orb one"></div>
+      <div class="rp-hero-orb two"></div>
+
+      <div class="rp-hero-content">
+        <div class="rp-hero-eyebrow" data-anim="eyebrow">
+          <span class="dot"></span> Available Now · 2,400+ Rentals
+        </div>
+
+        <h1 class="rp-hero-headline" data-anim="headline-word">
+          <span class="word">Find</span>
+          <span class="word">a</span>
+          <span class="word">place</span>
+          <span class="word">that</span>
+          <span class="word accent">feels</span>
+          <span class="word accent">like</span>
+          <span class="word accent">yours.</span>
+        </h1>
+
+        <p class="rp-hero-sub" data-anim="hero-sub">
+          Furnished studios, family apartments, and luxury penthouses — all
+          verified, all ready to move in. No brokers, no hidden fees.
+        </p>
+
+        <div class="rp-search-card" data-anim="search-card">
+          <div class="rp-search-tabs">
+            <button class="rp-search-tab active" type="button">All Rentals</button>
+            <button class="rp-search-tab" type="button">Furnished</button>
+            <button class="rp-search-tab" type="button">PG / Hostel</button>
+          </div>
+          <div class="rp-search-row">
+            <label class="rp-search-field">
+              <i class="fas fa-location-dot"></i>
+              <input type="text" placeholder="City, area or landmark" />
+            </label>
+            <label class="rp-search-field" style="max-width: 180px;">
+              <i class="fas fa-indian-rupee-sign"></i>
+              <input type="text" placeholder="Max budget" />
+            </label>
+            <button class="rp-search-btn" type="button">
+              <i class="fas fa-magnifying-glass"></i> Search
+            </button>
+          </div>
+        </div>
+
+        <div class="rp-hero-trust" data-anim="hero-trust">
+          <div class="rp-trust-item"><i class="fas fa-shield-halved"></i> Verified Listings</div>
+          <div class="rp-trust-item"><i class="fas fa-bolt"></i> Instant Booking</div>
+          <div class="rp-trust-item"><i class="fas fa-hand-holding-dollar"></i> Zero Brokerage</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 2: LISTINGS (Masonry Grid) ========== -->
+    <section class="rp-listings">
+      <div class="rp-listings-header">
+        <div>
+          <h2 class="rp-listings-title" data-anim="listings-title">Handpicked Rentals</h2>
+          <p class="rp-listings-sub" data-anim="listings-sub">Fresh listings updated every hour</p>
+        </div>
+        <div class="rp-chip-row" data-anim="chip-row">
+          <button class="rp-chip active" type="button">All</button>
+          <button class="rp-chip" type="button">Studio</button>
+          <button class="rp-chip" type="button">1 BHK</button>
+          <button class="rp-chip" type="button">2 BHK</button>
+          <button class="rp-chip" type="button">Villa</button>
+          <button class="rp-chip" type="button">Penthouse</button>
+        </div>
+      </div>
+
+      <div class="rp-masonry">
+        <div class="rp-masonry-card wide tall" data-anim="masonry">
+          <img src="images/rent-1.jpg" alt="Modern Studio Loft" />
+          <div class="rp-masonry-overlay">
+            <span class="rp-masonry-tag">Featured</span>
+            <div class="rp-masonry-title">Modern Studio Loft</div>
+            <div class="rp-masonry-meta">📍 Bandra West, Mumbai</div>
+            <div class="rp-masonry-bottom">
+              <div class="rp-masonry-price">₹45,000 <span>/mo</span></div>
+              <div class="rp-masonry-icon"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-masonry-card" data-anim="masonry">
+          <img src="images/rent-2.jpg" alt="Cozy 1 BHK" />
+          <div class="rp-masonry-overlay">
+            <span class="rp-masonry-tag">New</span>
+            <div class="rp-masonry-title">Cozy 1 BHK</div>
+            <div class="rp-masonry-meta">📍 Koramangala, Bangalore</div>
+            <div class="rp-masonry-bottom">
+              <div class="rp-masonry-price">₹28,000 <span>/mo</span></div>
+              <div class="rp-masonry-icon"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-masonry-card tall" data-anim="masonry">
+          <img src="images/rent-3.jpg" alt="Luxury Penthouse" />
+          <div class="rp-masonry-overlay">
+            <span class="rp-masonry-tag">Luxury</span>
+            <div class="rp-masonry-title">Luxury Penthouse</div>
+            <div class="rp-masonry-meta">📍 Jubilee Hills, Hyderabad</div>
+            <div class="rp-masonry-bottom">
+              <div class="rp-masonry-price">₹1,20,000 <span>/mo</span></div>
+              <div class="rp-masonry-icon"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-masonry-card" data-anim="masonry">
+          <img src="images/rent-4.jpg" alt="Garden 2 BHK" />
+          <div class="rp-masonry-overlay">
+            <span class="rp-masonry-tag">Popular</span>
+            <div class="rp-masonry-title">Garden 2 BHK</div>
+            <div class="rp-masonry-meta">📍 Baner, Pune</div>
+            <div class="rp-masonry-bottom">
+              <div class="rp-masonry-price">₹38,000 <span>/mo</span></div>
+              <div class="rp-masonry-icon"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-masonry-card wide" data-anim="masonry">
+          <img src="images/rent-5.jpg" alt="Family Villa" />
+          <div class="rp-masonry-overlay">
+            <span class="rp-masonry-tag">Family</span>
+            <div class="rp-masonry-title">Spacious Family Villa</div>
+            <div class="rp-masonry-meta">📍 HSR Layout, Bangalore</div>
+            <div class="rp-masonry-bottom">
+              <div class="rp-masonry-price">₹85,000 <span>/mo</span></div>
+              <div class="rp-masonry-icon"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-masonry-card" data-anim="masonry">
+          <img src="images/rent-6.jpg" alt="Sea View Apartment" />
+          <div class="rp-masonry-overlay">
+            <span class="rp-masonry-tag">Premium</span>
+            <div class="rp-masonry-title">Sea View Apartment</div>
+            <div class="rp-masonry-meta">📍 Marine Drive, Mumbai</div>
+            <div class="rp-masonry-bottom">
+              <div class="rp-masonry-price">₹95,000 <span>/mo</span></div>
+              <div class="rp-masonry-icon"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-masonry-card" data-anim="masonry">
+          <img src="images/rent-7.jpg" alt="Rustic Cottage" />
+          <div class="rp-masonry-overlay">
+            <span class="rp-masonry-tag">Unique</span>
+            <div class="rp-masonry-title">Rustic Cottage</div>
+            <div class="rp-masonry-meta">📍 Kasauli, HP</div>
+            <div class="rp-masonry-bottom">
+              <div class="rp-masonry-price">₹52,000 <span>/mo</span></div>
+              <div class="rp-masonry-icon"><i class="fas fa-arrow-right"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 3: LIFESTYLE MATCH ========== -->
+    <section class="rp-lifestyle">
+      <div class="rp-lifestyle-grid">
+        <div class="rp-lifestyle-visual" data-anim="lifestyle-visual">
+          <div class="rp-life-img one" data-anim="life-img">
+            <img src="images/rent-lifestyle-1.jpg" alt="Modern living room" />
+          </div>
+          <div class="rp-life-img two" data-anim="life-img">
+            <img src="images/rent-lifestyle-2.jpg" alt="Cozy bedroom" />
+          </div>
+          <div class="rp-life-img three" data-anim="life-img">
+            <img src="images/rent-lifestyle-3.jpg" alt="Kitchen" />
+          </div>
+          <div class="rp-life-badge" data-anim="life-badge">
+            <i class="fas fa-heart"></i>
+            <div class="rp-life-badge-text">
+              <strong>96% Match</strong>
+              <span>Based on your taste</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-lifestyle-copy">
+          <span class="eyebrow" data-anim="lifestyle-eyebrow">Smart Matching</span>
+          <h2 data-anim="lifestyle-heading">
+            Rentals matched to <span>your lifestyle.</span>
+          </h2>
+          <p data-anim="lifestyle-para">
+            Tell us what matters — pet-friendly, work-from-home setup, close to
+            metro, or gym in the building. Our smart engine shows only what fits.
+          </p>
+
+          <div class="rp-lifestyle-features">
+            <div class="rp-lf-item" data-anim="lf-item">
+              <div class="rp-lf-icon"><i class="fas fa-paw"></i></div>
+              <div class="rp-lf-text">
+                <strong>Pet Friendly</strong>
+                <span>Dozens of options</span>
+              </div>
+            </div>
+            <div class="rp-lf-item" data-anim="lf-item">
+              <div class="rp-lf-icon"><i class="fas fa-wifi"></i></div>
+              <div class="rp-lf-text">
+                <strong>WFH Ready</strong>
+                <span>High-speed internet</span>
+              </div>
+            </div>
+            <div class="rp-lf-item" data-anim="lf-item">
+              <div class="rp-lf-icon"><i class="fas fa-train"></i></div>
+              <div class="rp-lf-text">
+                <strong>Near Metro</strong>
+                <span>Under 1km radius</span>
+              </div>
+            </div>
+            <div class="rp-lf-item" data-anim="lf-item">
+              <div class="rp-lf-icon"><i class="fas fa-dumbbell"></i></div>
+              <div class="rp-lf-text">
+                <strong>Gym Access</strong>
+                <span>In-building facilities</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="rp-lifestyle-cta" data-anim="lifestyle-cta">
+            Try Smart Match <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 4: HOW RENTING WORKS ========== -->
+    <section class="rp-how">
+      <div class="rp-how-header">
+        <h2 data-anim="how-title">How Renting Works</h2>
+        <p data-anim="how-sub">Three steps from browsing to getting your keys.</p>
+      </div>
+
+      <div class="rp-how-track" data-anim="how-track">
+        <div class="rp-how-line"></div>
+
+        <div class="rp-how-step" data-anim="how-step">
+          <div class="rp-how-circle">
+            <i class="fas fa-search"></i>
+            <div class="rp-how-num">1</div>
+          </div>
+          <h3>Search &amp; Shortlist</h3>
+          <p>Filter by area, budget, and lifestyle. Save your favorites in one tap.</p>
+        </div>
+
+        <div class="rp-how-step" data-anim="how-step">
+          <div class="rp-how-circle">
+            <i class="fas fa-calendar-check"></i>
+            <div class="rp-how-num">2</div>
+          </div>
+          <h3>Tour &amp; Apply</h3>
+          <p>Schedule a visit or take a 3D tour. Submit your rental application online.</p>
+        </div>
+
+        <div class="rp-how-step" data-anim="how-step">
+          <div class="rp-how-circle">
+            <i class="fas fa-key"></i>
+            <div class="rp-how-num">3</div>
+          </div>
+          <h3>Sign &amp; Move In</h3>
+          <p>Digital agreement, secure payment, and you're handed the keys. Done.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 5: NEIGHBORHOOD SPOTLIGHT ========== -->
+    <section class="rp-hoods">
+      <div class="rp-hoods-header">
+        <h2 data-anim="hoods-title">Explore Neighborhoods</h2>
+        <p data-anim="hoods-sub">Trending areas renters love this month.</p>
+      </div>
+
+      <div class="rp-hoods-grid">
+        <div class="rp-hood-card" data-anim="hood-card">
+          <img src="images/rent-hood-1.jpg" alt="Bandra" />
+          <div class="rp-hood-body">
+            <div class="rp-hood-emoji">🌊</div>
+            <h3>Bandra West</h3>
+            <p class="tagline">Seaside vibes · Cafés &amp; culture</p>
+            <div class="rp-hood-stats">
+              <div class="rp-hood-stat">
+                <strong>240+</strong>
+                <span>Listings</span>
+              </div>
+              <div class="rp-hood-stat">
+                <strong>₹45K</strong>
+                <span>Avg rent</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-hood-card" data-anim="hood-card">
+          <img src="images/rent-hood-2.jpg" alt="Koramangala" />
+          <div class="rp-hood-body">
+            <div class="rp-hood-emoji">🚀</div>
+            <h3>Koramangala</h3>
+            <p class="tagline">Startup hub · Nightlife energy</p>
+            <div class="rp-hood-stats">
+              <div class="rp-hood-stat">
+                <strong>310+</strong>
+                <span>Listings</span>
+              </div>
+              <div class="rp-hood-stat">
+                <strong>₹32K</strong>
+                <span>Avg rent</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-hood-card" data-anim="hood-card">
+          <img src="images/rent-hood-3.jpg" alt="Jubilee Hills" />
+          <div class="rp-hood-body">
+            <div class="rp-hood-emoji">💎</div>
+            <h3>Jubilee Hills</h3>
+            <p class="tagline">Upscale living · Quiet streets</p>
+            <div class="rp-hood-stats">
+              <div class="rp-hood-stat">
+                <strong>180+</strong>
+                <span>Listings</span>
+              </div>
+              <div class="rp-hood-stat">
+                <strong>₹68K</strong>
+                <span>Avg rent</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 6: TENANT PERKS (Trust Band) ========== -->
+    <section class="rp-perks">
+      <div class="rp-perks-inner">
+        <div class="rp-perks-header">
+          <h2 data-anim="perks-title">Renting, minus the headache.</h2>
+          <p data-anim="perks-sub">Every rental on Estate Pro comes with built-in tenant protection.</p>
+        </div>
+
+        <div class="rp-perks-grid">
+          <div class="rp-perk" data-anim="perk">
+            <div class="rp-perk-icon"><i class="fas fa-shield-halved"></i></div>
+            <h3>Verified Owners</h3>
+            <p>Every owner is ID-verified. No fake listings, ever.</p>
+          </div>
+
+          <div class="rp-perk" data-anim="perk">
+            <div class="rp-perk-icon"><i class="fas fa-file-signature"></i></div>
+            <h3>Digital Agreement</h3>
+            <p>Legally valid e-agreements generated in minutes.</p>
+          </div>
+
+          <div class="rp-perk" data-anim="perk">
+            <div class="rp-perk-icon"><i class="fas fa-lock"></i></div>
+            <h3>Secure Deposits</h3>
+            <p>Deposits held in escrow until move-in is confirmed.</p>
+          </div>
+
+          <div class="rp-perk" data-anim="perk">
+            <div class="rp-perk-icon"><i class="fas fa-headset"></i></div>
+            <h3>24/7 Support</h3>
+            <p>Our tenant team is one tap away, day or night.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECTION 7: TENANT REVIEWS ========== -->
+    <section class="rp-reviews">
+      <div class="rp-reviews-header">
+        <h2 data-anim="reviews-title">Loved by tenants</h2>
+        <p data-anim="reviews-sub">Real reviews from real renters across India.</p>
+      </div>
+
+      <div class="rp-reviews-row">
+        <div class="rp-review" data-anim="review">
+          <div class="rp-review-quote-icon"><i class="fas fa-quote-right"></i></div>
+          <div class="rp-review-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="rp-review-text">
+            I found my studio in under 48 hours. The 3D tour saved me three
+            trips across the city. Zero brokerage was the cherry on top.
+          </p>
+          <div class="rp-review-author">
+            <img src="images/rent-review-1.jpg" alt="Aditi Kapoor" />
+            <div>
+              <strong>Aditi Kapoor</strong>
+              <span>Studio renter · Mumbai</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-review" data-anim="review">
+          <div class="rp-review-quote-icon"><i class="fas fa-quote-right"></i></div>
+          <div class="rp-review-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="rp-review-text">
+            The smart match nailed it — pet-friendly, near metro, and my dog
+            loves the little garden. It felt personal, not algorithm-y.
+          </p>
+          <div class="rp-review-author">
+            <img src="images/rent-review-2.jpg" alt="Karan Mehta" />
+            <div>
+              <strong>Karan Mehta</strong>
+              <span>2 BHK renter · Bangalore</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-review" data-anim="review">
+          <div class="rp-review-quote-icon"><i class="fas fa-quote-right"></i></div>
+          <div class="rp-review-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="rp-review-text">
+            Moving from Delhi to Hyderabad was scary. But the digital agreement
+            and escrow deposit made it feel safe. Highly recommended.
+          </p>
+          <div class="rp-review-author">
+            <img src="images/rent-review-3.jpg" alt="Sneha Iyer" />
+            <div>
+              <strong>Sneha Iyer</strong>
+              <span>Family rental · Hyderabad</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer-container">
+
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <div class="logo-emblem">
+            <i class="fas fa-house-chimney"></i>
+          </div>
+          <div class="logo-text">
+            <div class="logo-main">
+              Estate<span class="brand-pro">Pro</span><span class="brand-dot">.</span>
+            </div>
+            <div class="logo-tagline">PREMIUM REAL ESTATE</div>
+          </div>
+        </a>
+
+        <p class="footer-about">
+          Your trusted partner in finding premium properties. We connect buyers, sellers, and agents with the best real estate opportunities since 2010.
+        </p>
+
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="buy property.html">Buy Property</a></li>
+          <li><a href="rent property.html">Rent Property</a></li>
+          <li><a href="sell property.html">Sell Property</a></li>
+          <li><a href="projects.html">Projects</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="agents.html">Our Agents</a></li>
+          <li><a href="contact.html#careers">Careers</a></li>
+          <li><a href="projects.html">Blog</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="contact.html">Help Center</a></li>
+          <li><a href="user-dashboard.html">User Dashboard</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="contact.html#faqs">FAQs</a></li>
+          <li><a href="#">Sitemap</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-newsletter">
+        <h4>Stay Updated</h4>
+        <p>Subscribe to get the latest property listings and market insights delivered to your inbox.</p>
+
+        <form class="newsletter-form" onsubmit="event.preventDefault();">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit">
+            <i class="fas fa-paper-plane"></i> Subscribe
+          </button>
+        </form>
+
+        <div class="newsletter-note">
+          <i class="fas fa-lock"></i> We respect your privacy. No spam.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <div class="footer-copy">
+          © 2026 <strong>Estate Pro.</strong> All rights reserved.
+        </div>
+
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookies</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    (function() {
+      /* ========== DARK / LIGHT MODE ========== */
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      const themeLabel = document.getElementById('themeLabel');
+      const mobileThemeIcon = document.getElementById('mobileThemeIcon');
+      const mobileThemeLabel = document.getElementById('mobileThemeLabel');
+
+      function applyTheme(isDark) {
+        if (isDark) {
+          body.classList.add('dark');
+          themeIcon.classList.replace('fa-moon', 'fa-sun');
+          themeLabel.textContent = 'Light Mode';
+          mobileThemeIcon.classList.replace('fa-moon', 'fa-sun');
+          mobileThemeLabel.textContent = 'Light Mode';
+        } else {
+          body.classList.remove('dark');
+          themeIcon.classList.replace('fa-sun', 'fa-moon');
+          themeLabel.textContent = 'Dark Mode';
+          mobileThemeIcon.classList.replace('fa-sun', 'fa-moon');
+          mobileThemeLabel.textContent = 'Dark Mode';
+        }
+      }
+
+      applyTheme(localStorage.getItem('theme') === 'dark');
+
+      function toggleTheme() {
+        const isDark = !body.classList.contains('dark');
+        applyTheme(isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      }
+
+      document.getElementById('darkModeBtn').addEventListener('click', toggleTheme);
+      document.getElementById('mobileDarkModeBtn').addEventListener('click', toggleTheme);
+
+      /* ========== RTL / LTR ========== */
+      const rtlBtn = document.getElementById('rtlBtn');
+      const mobileRtlBtn = document.getElementById('mobileRtlBtn');
+      const rtlLabel = document.getElementById('rtlLabel');
+
+      function applyDirection(isRtl) {
+        if (isRtl) {
+          document.documentElement.setAttribute('dir', 'rtl');
+          rtlLabel.textContent = 'LTR / RTL';
+          document.body.classList.add('rtl');
+        } else {
+          document.documentElement.setAttribute('dir', 'ltr');
+          rtlLabel.textContent = 'RTL / LTR';
+          document.body.classList.remove('rtl');
+        }
+      }
+
+      applyDirection(localStorage.getItem('direction') === 'rtl');
+
+      function toggleDirection() {
+        const isRtl = document.documentElement.getAttribute('dir') !== 'rtl';
+        applyDirection(isRtl);
+        localStorage.setItem('direction', isRtl ? 'rtl' : 'ltr');
+      }
+
+      rtlBtn.addEventListener('click', toggleDirection);
+      mobileRtlBtn.addEventListener('click', toggleDirection);
+
+      /* ========== DESKTOP DROPDOWNS ========== */
+      document.querySelectorAll('.dropdown').forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          document.querySelectorAll('.dropdown').forEach(d => {
+            if (d !== dropdown) d.classList.remove('open');
+          });
+          dropdown.classList.toggle('open');
+        });
+      });
+
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+      });
+
+      /* ========== MOBILE MENU ========== */
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+      const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+      function openMobileMenu() {
+        mobileMenu.classList.add('active');
+        mobileOverlay.classList.add('active');
+        hamburgerBtn.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenu() {
+        mobileMenu.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        hamburgerBtn.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (mobileMenu.classList.contains('active')) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      });
+      mobileCloseBtn.addEventListener('click', closeMobileMenu);
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+
+      /* ========== MOBILE DROPDOWNS ========== */
+      document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+          const submenu = this.nextElementSibling;
+          const isOpen = submenu.classList.contains('open');
+
+          document.querySelectorAll('.mobile-submenu').forEach(sm => sm.classList.remove('open'));
+          document.querySelectorAll('.mobile-dropdown-toggle').forEach(t => t.classList.remove('open'));
+
+          if (!isOpen) {
+            submenu.classList.add('open');
+            this.classList.add('open');
+          }
+        });
+      });
+
+      /* ========== MOBILE MENU LINK CLICK CLOSE ========== */
+      document.querySelectorAll('.mobile-nav-list a').forEach(link => {
+        link.addEventListener('click', () => {
+          closeMobileMenu();
+        });
+      });
+
+      /* ========== BACK TO TOP ========== */
+      const backToTop = document.getElementById('backToTop');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      /* ========== PREVENT DEMO LINK NAVIGATION ========== */
+      document.querySelectorAll('a[href="#"]').forEach(link => {
+        link.addEventListener('click', (e) => e.preventDefault());
+      });
+    })();
+  </script>
+
+  <script type="module">
+    /* ============================================
+       ===== FRAMER MOTION (Motion One) =====
+       ============================================ */
+    import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+
+    /* ---------- SECTION 1: HERO — word-by-word + card lift ---------- */
+    // Eyebrow: drop from top + fade
+    const eyebrow = document.querySelector('[data-anim="eyebrow"]');
+    if (eyebrow) {
+      eyebrow.style.opacity = "0";
+      animate(eyebrow,
+        { opacity: [0, 1], transform: ["translateY(-20px)", "translateY(0px)"] },
+        { duration: 0.7, easing: [0.22, 1, 0.36, 1] }
+      );
+    }
+
+    // Headline: word-by-word stagger with rotationX
+    const words = document.querySelectorAll('[data-anim="headline-word"] .word');
+    words.forEach((w) => {
+      w.style.display = "inline-block";
+      w.style.opacity = "0";
+      w.style.transformStyle = "preserve-3d";
+    });
+    animate(
+      words,
+      {
+        opacity: [0, 1],
+        transform: ["rotateX(-90deg) translateY(20px)", "rotateX(0deg) translateY(0px)"]
+      },
+      { duration: 0.7, delay: stagger(0.08, { start: 0.3 }), easing: [0.22, 1, 0.36, 1] }
+    );
+
+    // Hero sub: fade + slight up
+    const heroSub = document.querySelector('[data-anim="hero-sub"]');
+    if (heroSub) {
+      heroSub.style.opacity = "0";
+      animate(heroSub,
+        { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+        { duration: 0.7, delay: 1.1 }
+      );
+    }
+
+    // Search card: scale-in from 0.9 with fade (unique — different from all others)
+    const searchCard = document.querySelector('[data-anim="search-card"]');
+    if (searchCard) {
+      searchCard.style.opacity = "0";
+      animate(searchCard,
+        { opacity: [0, 1], transform: ["scale(0.9) translateY(30px)", "scale(1) translateY(0px)"] },
+        { duration: 0.8, delay: 1.35, easing: [0.22, 1, 0.36, 1] }
+      );
+    }
+
+    // Trust items: sequential fade with slight up
+    const heroTrust = document.querySelector('[data-anim="hero-trust"]');
+    if (heroTrust) {
+      heroTrust.style.opacity = "0";
+      animate(heroTrust,
+        { opacity: [0, 1], transform: ["translateY(15px)", "translateY(0px)"] },
+        { duration: 0.6, delay: 1.6 }
+      );
+    }
+
+    /* ---------- SECTION 2: LISTINGS — masonry cards with scale-from-0.8 + clip reveal ---------- */
+    const masonryCards = document.querySelectorAll('[data-anim="masonry"]');
+    masonryCards.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.clipPath = "inset(20% 20% 20% 20% round 20px)";
+    });
+    inView(".rp-masonry", () => {
+      animate(
+        masonryCards,
+        {
+          opacity: [0, 1],
+          clipPath: ["inset(20% 20% 20% 20% round 20px)", "inset(0% 0% 0% 0% round 20px)"]
+        },
+        { duration: 0.9, delay: stagger(0.12, { start: 0.15 }), easing: [0.22, 1, 0.36, 1] }
+      );
+    }, { amount: 0.15 });
+
+    // Chip row: horizontal slide from right
+    const chipRow = document.querySelector('[data-anim="chip-row"]');
+    if (chipRow) {
+      chipRow.style.opacity = "0";
+      inView(chipRow, () => {
+        animate(chipRow,
+          { opacity: [0, 1], transform: ["translateX(40px)", "translateX(0px)"] },
+          { duration: 0.6 }
+        );
+      }, { amount: 0.6 });
+    }
+
+    // Listings titles: fade-up
+    const listingsTitle = document.querySelector('[data-anim="listings-title"]');
+    const listingsSub = document.querySelector('[data-anim="listings-sub"]');
+    [listingsTitle, listingsSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.1 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    /* ---------- SECTION 3: LIFESTYLE — layered image float + text stagger ---------- */
+    const lifeImgs = document.querySelectorAll('[data-anim="life-img"]');
+    lifeImgs.forEach((el, i) => {
+      el.style.opacity = "0";
+      // Different entry per position
+      const fromY = i === 0 ? -60 : (i === 1 ? 60 : 40);
+      animate(el,
+        { opacity: [0, 1], transform: [`translateY(${fromY}px) scale(0.85)`, "translateY(0px) scale(1)"] },
+        { duration: 0.9, delay: 0.2 + i * 0.2, easing: [0.34, 1.56, 0.64, 1] }
+      );
+    });
+
+    const lifeBadge = document.querySelector('[data-anim="life-badge"]');
+    if (lifeBadge) {
+      lifeBadge.style.opacity = "0";
+      animate(lifeBadge,
+        { opacity: [0, 1], transform: ["translateX(-40px) scale(0.6)", "translateX(0) scale(1)"] },
+        { duration: 0.8, delay: 0.9, easing: [0.34, 1.56, 0.64, 1] }
+      );
+    }
+
+    const lifestyleEyebrow = document.querySelector('[data-anim="lifestyle-eyebrow"]');
+    const lifestyleHeading = document.querySelector('[data-anim="lifestyle-heading"]');
+    const lifestylePara = document.querySelector('[data-anim="lifestyle-para"]');
+    inView(".rp-lifestyle-copy", () => {
+      const copyItems = [lifestyleEyebrow, lifestyleHeading, lifestylePara];
+      copyItems.forEach((el, i) => {
+        if (!el) return;
+        el.style.opacity = "0";
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(30px)", "translateY(0px)"] },
+          { duration: 0.7, delay: i * 0.15 }
+        );
+      });
+    }, { amount: 0.3 });
+
+    const lfItems = document.querySelectorAll('[data-anim="lf-item"]');
+    lfItems.forEach((el) => { el.style.opacity = "0"; });
+    inView(".rp-lifestyle-features", () => {
+      animate(
+        lfItems,
+        { opacity: [0, 1], transform: ["translateX(-30px)", "translateX(0px)"] },
+        { duration: 0.6, delay: stagger(0.12), easing: [0.22, 1, 0.36, 1] }
+      );
+    }, { amount: 0.3 });
+
+    const lifestyleCta = document.querySelector('[data-anim="lifestyle-cta"]');
+    if (lifestyleCta) {
+      lifestyleCta.style.opacity = "0";
+      inView(lifestyleCta, () => {
+        animate(lifestyleCta,
+          { opacity: [0, 1], transform: ["scale(0.8)", "scale(1)"] },
+          { duration: 0.5, delay: 0.3 }
+        );
+      }, { amount: 0.6 });
+    }
+
+    /* ---------- SECTION 4: HOW — sequential pop-in circles + text ---------- */
+    const howTitle = document.querySelector('[data-anim="how-title"]');
+    const howSub = document.querySelector('[data-anim="how-sub"]');
+    [howTitle, howSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.15 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const howSteps = document.querySelectorAll('[data-anim="how-step"]');
+    howSteps.forEach((step) => {
+      step.style.opacity = "0";
+      const circle = step.querySelector(".rp-how-circle");
+      if (circle) circle.style.opacity = "0";
+    });
+    inView(".rp-how-track", () => {
+      animate(
+        howSteps,
+        { opacity: [0, 1], transform: ["translateY(40px)", "translateY(0px)"] },
+        { duration: 0.7, delay: stagger(0.22), easing: [0.22, 1, 0.36, 1] }
+      );
+      const circles = document.querySelectorAll(".rp-how-circle");
+      animate(
+        circles,
+        { opacity: [0, 1], transform: ["scale(0.3) rotate(-90deg)", "scale(1) rotate(0deg)"] },
+        { duration: 0.8, delay: stagger(0.22, { start: 0.15 }), easing: [0.34, 1.56, 0.64, 1] }
+      );
+    }, { amount: 0.25 });
+
+    /* ---------- SECTION 5: HOODS — cards with 3D perspective tilt-in ---------- */
+    const hoodsTitle = document.querySelector('[data-anim="hoods-title"]');
+    const hoodsSub = document.querySelector('[data-anim="hoods-sub"]');
+    [hoodsTitle, hoodsSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["scale(0.9)", "scale(1)"] },
+          { duration: 0.6, delay: i * 0.1 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const hoodCards = document.querySelectorAll('[data-anim="hood-card"]');
+    hoodCards.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transformStyle = "preserve-3d";
+      el.style.perspective = "1200px";
+    });
+    inView(".rp-hoods-grid", () => {
+      animate(
+        hoodCards,
+        {
+          opacity: [0, 1],
+          transform: [
+            "perspective(1200px) rotateY(-25deg) translateY(60px)",
+            "perspective(1200px) rotateY(0deg) translateY(0px)"
+          ]
+        },
+        { duration: 0.9, delay: stagger(0.2), easing: [0.22, 1, 0.36, 1] }
+      );
+    }, { amount: 0.2 });
+
+    /* ---------- SECTION 6: PERKS — diagonal cascade + side-bar reveal ---------- */
+    const perksTitle = document.querySelector('[data-anim="perks-title"]');
+    const perksSub = document.querySelector('[data-anim="perks-sub"]');
+    [perksTitle, perksSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.12 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const perkItems = document.querySelectorAll('[data-anim="perk"]');
+    perkItems.forEach((el) => { el.style.opacity = "0"; });
+    inView(".rp-perks-grid", () => {
+      animate(
+        perkItems,
+        {
+          opacity: [0, 1],
+          transform: ["translateY(50px) rotate(-3deg)", "translateY(0) rotate(0deg)"]
+        },
+        { duration: 0.7, delay: stagger(0.15), easing: [0.34, 1.56, 0.64, 1] }
+      );
+    }, { amount: 0.3 });
+
+    /* ---------- SECTION 7: REVIEWS — 3 reviews card-flip / Y-axis spin ---------- */
+    const reviewsTitle = document.querySelector('[data-anim="reviews-title"]');
+    const reviewsSub = document.querySelector('[data-anim="reviews-sub"]');
+    [reviewsTitle, reviewsSub].forEach((el, i) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      inView(el, () => {
+        animate(el,
+          { opacity: [0, 1], transform: ["translateY(20px)", "translateY(0px)"] },
+          { duration: 0.6, delay: i * 0.12 }
+        );
+      }, { amount: 0.5 });
+    });
+
+    const reviewCards = document.querySelectorAll('[data-anim="review"]');
+    reviewCards.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transformStyle = "preserve-3d";
+    });
+    inView(".rp-reviews-row", () => {
+      animate(
+        reviewCards,
+        {
+          opacity: [0, 1],
+          transform: [
+            "perspective(1400px) rotateX(30deg) translateY(60px)",
+            "perspective(1400px) rotateX(0deg) translateY(0px)"
+          ]
+        },
+        { duration: 0.9, delay: stagger(0.25), easing: [0.22, 1, 0.36, 1] }
+      );
+    }, { amount: 0.25 });
+
+    /* ---------- Interactive tabs / chips ---------- */
+    document.querySelectorAll(".rp-search-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".rp-search-tab").forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+      });
+    });
+
+    document.querySelectorAll(".rp-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".rp-chip").forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

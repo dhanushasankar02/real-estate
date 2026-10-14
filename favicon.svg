@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="estateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="shineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Emblem -->
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="url(#estateGrad)"/>
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="url(#shineGrad)"/>
+
+  <!-- House Chimney -->
+  <path d="M 40 19 L 45 19 L 45 28 L 40 24 Z" fill="#ffffff"/>
+
+  <!-- House Roof -->
+  <path d="M 32 14 L 13 29.5 L 16.5 33.5 L 32 20.8 L 47.5 33.5 L 51 29.5 Z" fill="#ffffff"/>
+
+  <!-- House Body -->
+  <path d="M 19 29 L 45 29 C 46.5 29 47 29.5 47 31 L 47 46 C 47 48 45.5 49 43.5 49 L 20.5 49 C 18.5 49 17 48 17 46 L 17 31 C 17 29.5 17.5 29 19 29 Z" fill="#ffffff"/>
+
+  <!-- House Doorway with rounded top -->
+  <path d="M 27.5 37.5 C 27.5 35 36.5 35 36.5 37.5 L 36.5 49 L 27.5 49 Z" fill="#7c3aed"/>
+
+  <!-- Pink Accent Dot -->
+  <circle cx="51.5" cy="51.5" r="5" fill="#ec4899" stroke="#6d28d9" stroke-width="2"/>
+</svg>
