@@ -113,10 +113,11 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      height: 38px;
-      padding: 0 16px;
-      border-radius: 999px;
+      gap: 0;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 50%;
       border: 1px solid var(--border-light);
       background: var(--card-bg);
       backdrop-filter: blur(16px);
@@ -485,14 +486,14 @@
 
   <!-- Top Fixed Utility Controls (Dark Mode & RTL Toggles) -->
   <aside class="top-controls">
-    <button class="outline-pill" id="darkModeBtn" type="button" aria-label="Toggle Dark Mode">
+    <button class="outline-pill" id="darkModeBtn" type="button" title="Toggle Dark Mode" aria-label="Toggle Dark Mode">
       <i class="fas fa-moon" id="themeIcon"></i>
-      <span id="themeLabel">Dark Mode</span>
+      <span id="themeLabel" style="display:none;">Dark Mode</span>
     </button>
 
-    <button class="outline-pill" id="rtlBtn" type="button" aria-label="Toggle RTL Direction">
+    <button class="outline-pill" id="rtlBtn" type="button" title="Toggle RTL / LTR" aria-label="Toggle RTL Direction">
       <i class="fas fa-arrow-right-arrow-left"></i>
-      <span id="rtlLabel">RTL / LTR</span>
+      <span id="rtlLabel" style="display:none;">RTL / LTR</span>
     </button>
   </aside>
 
